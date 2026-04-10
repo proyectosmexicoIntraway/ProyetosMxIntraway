@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Unificado PM-7557 Symphonica</title>
+    <<link rel="stylesheet" type="css" href="css/">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="text-slate-800 pb-12">
+
+    <!-- HEADER PRINCIPAL -->
+    <header class="sticky top-0 z-50 bg-white shadow-sm border-b border-slate-200 px-6 py-4">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-4">
+                <!-- Imagen del logo solicitada -->
+                <div class="bg-slate-50 p-2 rounded-xl border border-slate-100">
+                    <img src="icon/intraway.png" alt="PM-7557 Symphonica" class="h-10 object-contain">
+                </div>
+                <div class="h-10 w-px bg-slate-200 hidden md:block"></div>
+                <div>
+                    <h1 class="font-bold text-2xl text-slate-900 tracking-tight">PM-7557 Symphonica</h1>
+                    <div class="flex items-center gap-2 mt-0.5">
+                        <span class="text-[10px] bg-blue-600 text-white px-2 py-0.5 rounded font-bold uppercase">iZZi Telecom</span>
+                        <span class="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded font-medium uppercase italic">IMS ZTE Migration</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-6">
+                <div class="text-right hidden lg:block">
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Estado General</p>
+                    <p class="text-lg font-bold text-emerald-600">51.0% Realizado</p>
+                </div>
+                <div class="bg-blue-50 border border-blue-100 rounded-2xl px-4 py-2 flex items-center gap-3">
+                    <i data-lucide="calendar" class="w-5 h-5 text-blue-600"></i>
+                    <div>
+                        <p class="text-[9px] text-blue-500 font-bold uppercase">Cierre Estimado</p>
+                        <p class="text-sm font-bold text-blue-900">21 de Abril, 2026</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto p-6 space-y-8">
+        
+        <!-- RESUMEN EJECUTIVO (KPIs) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="glass-card p-5 rounded-3xl shadow-sm border-t-4 border-t-blue-500">
+                <div class="flex justify-between items-start mb-3">
+                    <p class="text-slate-500 text-xs font-bold uppercase">Entregables</p>
+                    <i data-lucide="check-circle" class="w-4 h-4 text-blue-500"></i>
+                </div>
+                <p class="text-3xl font-black text-slate-900">2 / 5</p>
+                <p class="text-[11px] text-slate-500 mt-2 italic font-medium">Kick-off y FDD HFC OK</p>
+            </div>
+
+            <div class="glass-card p-5 rounded-3xl shadow-sm border-t-4 border-t-purple-500">
+                <div class="flex justify-between items-start mb-3">
+                    <p class="text-slate-500 text-xs font-bold uppercase">Cambios (CR)</p>
+                    <i data-lucide="git-pull-request" class="w-4 h-4 text-purple-500"></i>
+                </div>
+                <p class="text-3xl font-black text-slate-900">02</p>
+                <p class="text-[11px] text-purple-600 mt-2 font-bold">CR1 & CR2 Aprobados</p>
+            </div>
+
+            <div class="glass-card p-5 rounded-3xl shadow-sm border-t-4 border-t-emerald-500">
+                <div class="flex justify-between items-start mb-3">
+                    <p class="text-slate-500 text-xs font-bold uppercase">Hitos Técnicos</p>
+                    <i data-lucide="zap" class="w-4 h-4 text-emerald-500"></i>
+                </div>
+                <p class="text-3xl font-black text-slate-900">95%</p>
+                <p class="text-[11px] text-slate-500 mt-2 font-medium">Espec. Funcional HFC</p>
+            </div>
+
+            <div class="glass-card p-5 rounded-3xl shadow-sm border-t-4 border-t-orange-500">
+                <div class="flex justify-between items-start mb-3">
+                    <p class="text-slate-500 text-xs font-bold uppercase">Días Restantes</p>
+                    <i data-lucide="hourglass" class="w-4 h-4 text-orange-500"></i>
+                </div>
+                <p class="text-3xl font-black text-slate-900">20</p>
+                <p class="text-[11px] text-orange-600 mt-2 font-bold uppercase tracking-tight">Fase ATP por iniciar</p>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 1: PROGRESO Y DETALLES -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-2 glass-card p-6 rounded-3xl shadow-sm">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="font-bold text-lg flex items-center gap-2">
+                        <i data-lucide="bar-chart-3" class="w-5 h-5 text-blue-600"></i>
+                        Avance Físico por Etapa
+                    </h3>
+                </div>
+                <div class="h-[220px]">
+                    <canvas id="mainProgressChart"></canvas>
+                </div>
+            </div>
+
+            <div class="glass-card p-6 rounded-3xl shadow-sm bg-gradient-to-br from-white to-blue-50/30">
+                <h3 class="font-bold text-lg mb-4">Alcance del Proyecto</h3>
+                <div class="space-y-4">
+                    <div class="flex items-start gap-3">
+                        <div class="mt-1 bg-blue-100 p-1 rounded"><i data-lucide="target" class="w-3 h-3 text-blue-600"></i></div>
+                        <p class="text-xs leading-relaxed text-slate-600 font-medium italic">
+                            Unificar activación de telefonía FTTH y HFC, migrando de Nokia IMS a ZTE IMS.
+                        </p>
+                    </div>
+                    <div class="pt-4 border-t border-slate-100 space-y-3">
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="text-slate-400 font-bold uppercase tracking-tighter">PM Client</span>
+                            <span class="font-bold text-slate-700">Alberto Casarreal</span>
+                        </div>
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="text-slate-400 font-bold uppercase tracking-tighter">Tecnología</span>
+                            <span class="font-bold text-slate-700">IMS ZTE / GPON</span>
+                        </div>
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="text-slate-400 font-bold uppercase tracking-tighter">Entorno</span>
+                            <span class="font-bold text-blue-600">Laboratorio QA</span>
+                        </div>
+                    </div>
+                    <div class="mt-4 p-4 rounded-2xl bg-white border border-slate-200">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase mb-2">Próxima Actividad Crítica</p>
+                        <div class="flex items-center gap-2 text-blue-700 font-bold text-sm leading-tight">
+                            <i data-lucide="alert-circle" class="w-4 h-4"></i>
+                            Validar conectividad QA (iZZi)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 2: CALENDARIO UAT (FUSIÓN) -->
+        <section class="space-y-4">
+            <div class="flex items-center justify-between">
+                <h2 class="text-xl font-bold flex items-center gap-2 text-slate-800">
+                    <i data-lucide="layout-list" class="w-6 h-6 text-indigo-600"></i>
+                    Planificación Semanal de Pruebas UAT
+                </h2>
+                <div class="flex gap-2">
+                    <span class="text-[10px] bg-white border border-slate-200 px-3 py-1 rounded-full font-bold text-slate-500 uppercase">Semana 16 - Abril</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- LUNES -->
+                <div class="glass-card rounded-3xl p-5 flex flex-col space-y-4 bg-blue-50/20 border-blue-100 shadow-sm">
+                    <div class="flex items-center justify-between border-b border-blue-100 pb-2">
+                        <span class="font-black text-blue-700 uppercase text-xs tracking-widest">Lunes 13 de Abril</span>
+                        <i data-lucide="activity" class="w-4 h-4 text-blue-400"></i>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="test-case p-3 bg-white rounded-2xl shadow-sm border border-slate-100 text-[11px] font-bold text-slate-700 border-l-blue-500">Alta servicio de Telefonía</div>
+                        <div class="test-case p-3 bg-white rounded-2xl shadow-sm border border-slate-100 text-[11px] font-bold text-slate-700 border-l-blue-500">Modificación Telefonía (Modify Call Features)*</div>
+                        <div class="test-case p-3 bg-white rounded-2xl shadow-sm border border-slate-100 text-[11px] font-bold text-slate-700 border-l-blue-500">Baja servicio de Telefonía</div>
+                    </div>
+                </div>
+
+                <!-- MARTES -->
+                <div class="glass-card rounded-3xl p-5 flex flex-col space-y-4 bg-indigo-50/20 border-indigo-100 shadow-sm">
+                    <div class="flex items-center justify-between border-b border-indigo-100 pb-2">
+                        <span class="font-black text-indigo-700 uppercase text-xs tracking-widest">Martes 14 de Abril</span>
+                        <i data-lucide="phone-off" class="w-4 h-4 text-indigo-400"></i>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="test-case p-3 bg-white rounded-2xl shadow-sm border border-slate-100 text-[11px] font-bold text-slate-700 border-l-indigo-500">Suspensión de servicio</div>
+                        <div class="test-case p-3 bg-white rounded-2xl shadow-sm border border-slate-100 text-[11px] font-bold text-slate-700 border-l-indigo-500">Suspensión voluntaria</div>
+                        <div class="test-case p-3 bg-white rounded-2xl shadow-sm border border-slate-100 text-[11px] font-bold text-slate-700 border-l-indigo-500">Reactivación de servicio</div>
+                        <div class="test-case p-3 bg-white rounded-2xl shadow-sm border border-slate-100 text-[11px] font-bold text-slate-700 border-l-indigo-500">Reactivación voluntaria</div>
+                    </div>
+                </div>
+
+                <!-- MIERCOLES -->
+                <div class="glass-card rounded-3xl p-5 flex flex-col space-y-4 bg-purple-50/20 border-purple-100 shadow-sm">
+                    <div class="flex items-center justify-between border-b border-purple-100 pb-2">
+                        <span class="font-black text-purple-700 uppercase text-xs tracking-widest">Miércoles 15 de Abril</span>
+                        <i data-lucide="refresh-cw" class="w-4 h-4 text-purple-400"></i>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="test-case p-3 bg-white rounded-2xl shadow-sm border border-slate-100 text-[11px] font-bold text-slate-700 border-l-purple-500">Cambio de equipo (ONT)</div>
+                        <div class="test-case p-3 bg-white rounded-2xl shadow-sm border border-slate-100 text-[11px] font-bold text-slate-700 border-l-purple-500">Modify Sip Password</div>
+                        <div class="test-case p-3 bg-white rounded-2xl shadow-sm border border-slate-100 text-[11px] font-bold text-slate-700 border-l-purple-500">Refresh Servicio de Telefonía</div>
+                    </div>
+                </div>
+
+                <!-- JUEVES -->
+                <div class="glass-card rounded-3xl p-5 flex flex-col space-y-4 bg-orange-50/20 border-orange-100 shadow-sm">
+                    <div class="flex items-center justify-between border-b border-orange-100 pb-2">
+                        <span class="font-black text-orange-700 uppercase text-xs tracking-widest">Jueves 17 de Abril</span>
+                        <i data-lucide="search" class="w-4 h-4 text-orange-400"></i>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="test-case p-3 bg-white rounded-2xl shadow-sm border border-slate-100 text-[11px] font-bold text-slate-700 border-l-orange-500 text-orange-800 italic">Cambio de número (Pendiente)</div>
+                        <div class="test-case p-3 bg-white rounded-2xl shadow-sm border border-slate-100 text-[11px] font-bold text-slate-700 border-l-orange-500 text-orange-800 italic">Query Voice Subscription (Pendiente)</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 3: MATRIZ DE FLUJOS TÉCNICOS (DEL CSV) -->
+        <div class="glass-card rounded-3xl shadow-sm overflow-hidden">
+            <div class="p-6 bg-white border-b border-slate-100 flex justify-between items-center">
+                <h3 class="font-bold flex items-center gap-2">
+                    <i data-lucide="list-checks" class="w-5 h-5 text-emerald-600"></i>
+                    Estatus Detallado de Flujos GPON
+                </h3>
+                <span class="text-[10px] text-slate-400 font-bold uppercase tracking-widest italic">Datos: Sheet4.csv</span>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm">
+                    <thead>
+                        <tr class="bg-slate-50 text-slate-500 text-[10px] uppercase font-black tracking-widest">
+                            <th class="px-6 py-4">Operación</th>
+                            <th class="px-6 py-4">Symphonica Flow ID</th>
+                            <th class="px-6 py-4 text-center">Progreso</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        <tr class="hover:bg-slate-50/50 transition-colors">
+                            <td class="px-6 py-4 font-bold text-slate-700">Alta de Servicio IMS</td>
+                            <td class="px-6 py-4 text-xs font-mono text-slate-400">RESIDENTIAL_VOICE.GPON.Create_IMS</td>
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="flex-1 bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                                        <div class="bg-emerald-500 h-full progress-bar-glow" style="width: 90%"></div>
+                                    </div>
+                                    <span class="text-[10px] font-black text-emerald-600">90%</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-slate-50/50 transition-colors">
+                            <td class="px-6 py-4 font-bold text-slate-700">Modificación del servicio de Telefonía (Modify Call Features)*</td>
+                            <td class="px-6 py-4 text-xs font-mono text-slate-400">RESIDENTIAL_VOICE.GPON.Service.Modify_IMS</td>
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="flex-1 bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                                        <div class="bg-emerald-500 h-full progress-bar-glow" style="width: 90%"></div>
+                                    </div>
+                                    <span class="text-[10px] font-black text-emerald-600">90%</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-slate-50/50 transition-colors">
+                            <td class="px-6 py-4 font-bold text-slate-700">Baja servicio de Telefonía</td>
+                            <td class="px-6 py-4 text-xs font-mono text-slate-400">RESIDENTIAL_VOICE.GPON.Service.Delete_IMS</td>
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="flex-1 bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                                        <div class="bg-emerald-500 h-full progress-bar-glow" style="width: 90%"></div>
+                                    </div>
+                                    <span class="text-[10px] font-black text-emerald-600">90%</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-slate-50/50 transition-colors">
+                            <td class="px-6 py-4 font-bold text-slate-700">Baja servicio de Telefonía</td>
+                            <td class="px-6 py-4 text-xs font-mono text-slate-400">RESIDENTIAL_VOICE.GPON.Service.Delete.Button</td>
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="flex-1 bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                                        <div class="bg-emerald-500 h-full progress-bar-glow" style="width: 90%"></div>
+                                    </div>
+                                    <span class="text-[10px] font-black text-emerald-600">90%</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-slate-50/50 transition-colors">
+                            <td class="px-6 py-4 font-bold text-slate-700">Suspensión de servicio de Telefonía</td>
+                            <td class="px-6 py-4 text-xs font-mono text-slate-400">RESIDENTIAL_VOICE.GPON.Service.Suspend_IMS</td>
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="flex-1 bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                                        <div class="bg-emerald-500 h-full progress-bar-glow" style="width: 90%"></div>
+                                    </div>
+                                    <span class="text-[10px] font-black text-emerald-600">90%</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-slate-50/50 transition-colors">
+                            <td class="px-6 py-4 font-bold text-slate-700">Suspensión voluntaria de Telefonia</td>
+                            <td class="px-6 py-4 text-xs font-mono text-slate-400">RESIDENTIAL_VOICE.GPON.Service.Suspend_Button_IMS</td>
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="flex-1 bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                                        <div class="bg-emerald-500 h-full progress-bar-glow" style="width: 90%"></div>
+                                    </div>
+                                    <span class="text-[10px] font-black text-emerald-600">90%</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-slate-50/50 transition-colors">
+                            <td class="px-6 py-4 font-bold text-slate-700">Reactivación de servicio de Telefonía</td>
+                            <td class="px-6 py-4 text-xs font-mono text-slate-400">RESIDENTIAL_VOICE.GPON.Service.Resume_IMS</td>
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="flex-1 bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                                        <div class="bg-emerald-500 h-full progress-bar-glow" style="width: 90%"></div>
+                                    </div>
+                                    <span class="text-[10px] font-black text-emerald-600">90%</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-slate-50/50 transition-colors">
+                            <td class="px-6 py-4 font-bold text-slate-700">Reactivación voluntaria de Telefonía</td>
+                            <td class="px-6 py-4 text-xs font-mono text-slate-400">RESIDENTIAL_VOICE.GPON.Service.Resume_Button_IMS</td>
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="flex-1 bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                                        <div class="bg-emerald-500 h-full progress-bar-glow" style="width: 90%"></div>
+                                    </div>
+                                    <span class="text-[10px] font-black text-emerald-600">90%</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-slate-50/50 transition-colors">
+                            <td class="px-6 py-4 font-bold text-slate-700">Cambio de equipo (ONT)</td>
+                            <td class="px-6 py-4 text-xs font-mono text-slate-400">RESIDENTIAL_ACCESS.GPON.Equipment.Modify_NewModelOfONT</td>
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="flex-1 bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                                        <div class="bg-emerald-500 h-full progress-bar-glow" style="width: 90%"></div>
+                                    </div>
+                                    <span class="text-[10px] font-black text-emerald-600">90%</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-slate-50/50 transition-colors">
+                            <td class="px-6 py-4 font-bold text-slate-700">Modify Sip Password</td>
+                            <td class="px-6 py-4 text-xs font-mono text-slate-400">VOICE.GPON.ModifySIPPassword</td>
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="flex-1 bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                                        <div class="bg-emerald-500 h-full progress-bar-glow" style="width: 90%"></div>
+                                    </div>
+                                    <span class="text-[10px] font-black text-emerald-600">90%</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-slate-50/50 transition-colors">
+                            <td class="px-6 py-4 font-bold text-slate-700">Refresh de Servicio de Telefonía</td>
+                            <td class="px-6 py-4 text-xs font-mono text-slate-400">RESIDENTIAL_VOICE.GPON.Service.Refresh_IMS_0825</td>
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="flex-1 bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                                        <div class="bg-emerald-500 h-full progress-bar-glow" style="width: 90%"></div>
+                                    </div>
+                                    <span class="text-[10px] font-black text-emerald-600">90%</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-slate-50/50 transition-colors">
+                            <td class="px-6 py-4 font-bold text-slate-700">Cambio de Número (HFC/FTTH)</td>
+                            <td class="px-6 py-4 text-xs font-mono text-slate-400">RESIDENTIAL_VOICE.GPON.Equipment.Modify_IMS</td>
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="flex-1 bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                                        <div class="bg-amber-500 h-full progress-bar-glow" style="width: 80%"></div>
+                                    </div>
+                                    <span class="text-[10px] font-black text-amber-600">80%</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-slate-50/50 transition-colors">
+                            <td class="px-6 py-4 font-bold text-slate-700 text-slate-400">Query Voice Subscription</td>
+                            <td class="px-6 py-4 text-xs font-mono text-slate-300 italic">No existe el flujo aún</td>
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="flex-1 bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                                        <div class="bg-slate-300 h-full" style="width: 0%"></div>
+                                    </div>
+                                    <span class="text-[10px] font-black text-slate-400 text-center">N/A</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

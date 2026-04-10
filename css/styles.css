@@ -1,0 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; }
+.glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border: 1px solid #e2e8f0; }
+.test-case { border-left: 4px solid #3b82f6; transition: transform 0.2s; }
+.test-case:hover { transform: translateX(4px); }
+.progress-bar-glow { box-shadow: 0 0 10px rgba(59, 130, 246, 0.3); }
