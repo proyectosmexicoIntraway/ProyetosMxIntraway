@@ -4,380 +4,247 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Unificado PM-7557 Symphonica</title>
-    <<link rel="stylesheet" type="css" href="css/">
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Netlify Identity Widget -->
+    <script type="text/javascript" src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <!-- Iconos y Gráficos -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-</head>
-<body class="text-slate-800 pb-12">
-
-    <!-- HEADER RESPONSIVO -->
-    <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md shadow-sm border-b border-slate-200 px-4 md:px-6 py-4">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-            <div class="flex items-center gap-3 md:gap-4 w-full md:w-auto">
-                <div class="bg-slate-50 p-2 rounded-xl border border-slate-100 flex-shrink-0">
-                    <img src="icon/intraway.png" alt="Intraway Logo" class="h-8 md:h-10 object-contain">
-                </div>
-                <div class="h-8 w-px bg-slate-200 hidden sm:block"></div>
-                <div class="min-w-0">
-                    <h1 class="font-bold text-lg md:text-2xl text-slate-900 tracking-tight truncate">PM-7557 Symphonica</h1>
-                    <div class="flex items-center gap-2 mt-0.5">
-                        <span class="text-[9px] md:text-[10px] bg-blue-600 text-white px-2 py-0.5 rounded font-bold uppercase">iZZi Telecom</span>
-                        <span class="text-[9px] md:text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded font-medium uppercase italic hidden xs:inline">IMS ZTE Migration</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="flex items-center justify-between md:justify-end gap-4 md:gap-6 w-full md:w-auto border-t md:border-0 pt-3 md:pt-0">
-                <div class="text-left md:text-right">
-                    <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest leading-none">Estado General</p>
-                    <p class="text-sm md:text-lg font-bold text-emerald-600">51.0% Realizado</p>
-                </div>
-                <div class="bg-blue-50 border border-blue-100 rounded-xl md:rounded-2xl px-3 py-1.5 md:px-4 md:py-2 flex items-center gap-2 md:gap-3">
-                    <i data-lucide="calendar" class="w-4 h-4 md:w-5 md:h-5 text-blue-600"></i>
-                    <div>
-                        <p class="text-[8px] md:text-[9px] text-blue-500 font-bold uppercase leading-none">Cierre Estimado</p>
-                        <p class="text-xs md:text-sm font-bold text-blue-900">21 de Abril, 2026</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <main class="max-w-7xl mx-auto p-4 md:p-6 space-y-6 md:space-y-8">
+    <style>
+        /* Estados de visualización controlados por el script central */
+        .hidden-content { display: none; }
+        .authenticated .hidden-content { display: block; }
+        .authenticated .login-prompt { display: none; }
         
-        <!-- RESUMEN KPI - GRID ADAPTABLE -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div class="glass-card p-4 md:p-5 rounded-2xl md:rounded-3xl shadow-sm border-t-4 border-t-blue-500 bg-white">
-                <div class="flex justify-between items-start mb-2">
-                    <p class="text-slate-500 text-[10px] font-bold uppercase tracking-tighter">Entregables</p>
-                    <i data-lucide="check-circle" class="w-4 h-4 text-blue-500"></i>
-                </div>
-                <p class="text-2xl md:text-3xl font-black text-slate-900">2 / 5</p>
-                <p class="text-[10px] text-slate-500 mt-1 italic font-medium">Kick-off y FDD HFC OK</p>
-            </div>
+        .glass-card {
+            transition: all 0.3s ease;
+        }
+        .progress-bar-glow {
+            box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 pb-12">
 
-            <div class="glass-card p-4 md:p-5 rounded-2xl md:rounded-3xl shadow-sm border-t-4 border-t-purple-500 bg-white">
-                <div class="flex justify-between items-start mb-2">
-                    <p class="text-slate-500 text-[10px] font-bold uppercase tracking-tighter">Cambios (CR)</p>
-                    <i data-lucide="git-pull-request" class="w-4 h-4 text-purple-500"></i>
-                </div>
-                <p class="text-2xl md:text-3xl font-black text-slate-900">02</p>
-                <p class="text-[10px] text-purple-600 mt-1 font-bold">CR1 & CR2 Aprobados</p>
-            </div>
-
-            <div class="glass-card p-4 md:p-5 rounded-2xl md:rounded-3xl shadow-sm border-t-4 border-t-emerald-500 bg-white">
-                <div class="flex justify-between items-start mb-2">
-                    <p class="text-slate-500 text-[10px] font-bold uppercase tracking-tighter">Hitos Técnicos</p>
-                    <i data-lucide="zap" class="w-4 h-4 text-emerald-500"></i>
-                </div>
-                <p class="text-2xl md:text-3xl font-black text-slate-900">95%</p>
-                <p class="text-[10px] text-slate-500 mt-1 font-medium">Espec. Funcional FTTH</p>
-            </div>
-
-            <div class="glass-card p-4 md:p-5 rounded-2xl md:rounded-3xl shadow-sm border-t-4 border-t-orange-500 bg-white">
-                <div class="flex justify-between items-start mb-2">
-                    <p class="text-slate-500 text-[10px] font-bold uppercase tracking-tighter">Días Restantes</p>
-                    <i data-lucide="hourglass" class="w-4 h-4 text-orange-500"></i>
-                </div>
-                <p class="text-2xl md:text-3xl font-black text-slate-900">20</p>
-                <p class="text-[10px] text-orange-600 mt-1 font-bold uppercase tracking-tight">Fase ATP iniciar FTTH</p>
-            </div>
+    <!-- BARRA DE NAVEGACIÓN SUPERIOR -->
+    <nav class="bg-white border-b border-slate-200 px-4 md:px-8 py-3 flex justify-between items-center sticky top-0 z-[60]">
+        <div class="flex items-center gap-3 md:gap-4">
+            <a href="index.html" class="flex items-center gap-2 text-indigo-600 hover:text-indigo-800 transition-all font-bold group">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transform group-hover:-translate-x-1 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                </svg>
+                <span class="text-xs md:text-sm">Dashboard</span>
+            </a>
+            <div class="h-4 w-[1px] bg-slate-200"></div>
+            <h1 class="text-sm md:text-base font-black text-slate-800 uppercase tracking-tighter">
+                <span class="text-indigo-600 italic">iZZi</span>Fija
+            </h1>
         </div>
+        
+        <div class="flex items-center gap-4">
+            <span id="user-display" class="hidden md:inline text-[9px] font-bold text-slate-400 uppercase tracking-widest"></span>
+            <button id="auth-btn" class="text-[10px] font-bold text-red-500 hover:text-red-700 uppercase tracking-widest border border-red-100 px-3 py-1.5 rounded-lg hover:bg-red-50 transition-all">
+                Cerrar Sesión
+            </button>
+        </div>
+    </nav>
 
-        <!-- GRÁFICO Y ALCANCE -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div class="lg:col-span-2 glass-card p-4 md:p-6 rounded-2xl md:rounded-3xl shadow-sm bg-white">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="font-bold text-base md:text-lg flex items-center gap-2">
-                        <i data-lucide="bar-chart-3" class="w-5 h-5 text-blue-600"></i>
-                        Avance Físico por Etapa
+    <!-- VISTA DE LOGOUT (Seguridad) -->
+    <div id="logged-out-view" class="login-prompt text-center py-20 px-4" style="display: none;">
+        <div class="bg-white p-8 md:p-12 rounded-[2.5rem] shadow-2xl shadow-slate-200 border border-slate-100 inline-block max-w-sm w-full">
+            <div class="bg-indigo-50 text-indigo-600 p-5 rounded-3xl mb-6 inline-block">
+                <i data-lucide="lock" class="w-10 h-10"></i>
+            </div>
+            <h2 class="text-2xl font-black text-slate-800 mb-3 uppercase tracking-tight">Acceso Privado</h2>
+            <p class="text-slate-500 mb-8 text-sm font-medium">Esta sección contiene datos sensibles del proyecto Symphonica. Por favor identifícate.</p>
+            <button onclick="window.location.href='index.html?login=true'" class="w-full bg-indigo-600 text-white px-8 py-4 rounded-2xl font-black hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100 uppercase tracking-widest text-sm">
+                Ir al Identificador
+            </button>
+        </div>
+    </div>
+
+    <!-- CONTENIDO PROTEGIDO -->
+    <div id="logged-in-view" class="hidden-content">
+        <!-- HEADER DEL PROYECTO -->
+        <header class="sticky top-[53px] z-50 bg-white/80 backdrop-blur-md shadow-sm border-b border-slate-200 px-4 md:px-6 py-4">
+            <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="flex items-center gap-3 md:gap-4 w-full md:w-auto">
+                    <div class="bg-slate-50 p-2 rounded-xl border border-slate-100 flex-shrink-0">
+                        <img src="icon/intraway.png" alt="Intraway Logo" class="h-8 md:h-10 object-contain" onerror="this.src='https://via.placeholder.com/40?text=IW'">
+                    </div>
+                    <div class="h-8 w-px bg-slate-200 hidden sm:block"></div>
+                    <div class="min-w-0">
+                        <h1 class="font-bold text-lg md:text-2xl text-slate-900 tracking-tight truncate">PM-7557 Symphonica</h1>
+                        <div class="flex items-center gap-2 mt-0.5">
+                            <span class="text-[9px] md:text-[10px] bg-blue-600 text-white px-2 py-0.5 rounded font-bold uppercase">iZZi Telecom</span>
+                            <span class="text-[9px] md:text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded font-medium uppercase italic hidden xs:inline">IMS ZTE Migration</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex items-center justify-between md:justify-end gap-4 md:gap-6 w-full md:w-auto border-t md:border-0 pt-3 md:pt-0">
+                    <div class="text-left md:text-right">
+                        <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest leading-none">Estado General</p>
+                        <p class="text-sm md:text-lg font-bold text-emerald-600">51.0% Realizado</p>
+                    </div>
+                    <div class="bg-blue-50 border border-blue-100 rounded-xl md:rounded-2xl px-3 py-1.5 md:px-4 md:py-2 flex items-center gap-2 md:gap-3">
+                        <i data-lucide="calendar" class="w-4 h-4 md:w-5 md:h-5 text-blue-600"></i>
+                        <div>
+                            <p class="text-[8px] md:text-[9px] text-blue-500 font-bold uppercase leading-none">Cierre Estimado</p>
+                            <p class="text-xs md:text-sm font-bold text-blue-900">21 de Abril, 2026</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="max-w-7xl mx-auto p-4 md:p-6 space-y-6 md:space-y-8">
+            <!-- KPIs -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="glass-card p-4 md:p-5 rounded-2xl md:rounded-3xl shadow-sm border-t-4 border-t-blue-500 bg-white">
+                    <div class="flex justify-between items-start mb-2">
+                        <p class="text-slate-500 text-[10px] font-bold uppercase tracking-tighter">Entregables</p>
+                        <i data-lucide="check-circle" class="w-4 h-4 text-blue-500"></i>
+                    </div>
+                    <p class="text-2xl md:text-3xl font-black text-slate-900">2 / 5</p>
+                    <p class="text-[10px] text-slate-500 mt-1 italic font-medium">Kick-off y FDD HFC OK</p>
+                </div>
+
+                <div class="glass-card p-4 md:p-5 rounded-2xl md:rounded-3xl shadow-sm border-t-4 border-t-purple-500 bg-white">
+                    <div class="flex justify-between items-start mb-2">
+                        <p class="text-slate-500 text-[10px] font-bold uppercase tracking-tighter">Cambios (CR)</p>
+                        <i data-lucide="git-pull-request" class="w-4 h-4 text-purple-500"></i>
+                    </div>
+                    <p class="text-2xl md:text-3xl font-black text-slate-900">02</p>
+                    <p class="text-[10px] text-purple-600 mt-1 font-bold">CR1 & CR2 Aprobados</p>
+                </div>
+
+                <div class="glass-card p-4 md:p-5 rounded-2xl md:rounded-3xl shadow-sm border-t-4 border-t-emerald-500 bg-white">
+                    <div class="flex justify-between items-start mb-2">
+                        <p class="text-slate-500 text-[10px] font-bold uppercase tracking-tighter">Hitos Técnicos</p>
+                        <i data-lucide="zap" class="w-4 h-4 text-emerald-500"></i>
+                    </div>
+                    <p class="text-2xl md:text-3xl font-black text-slate-900">95%</p>
+                    <p class="text-[10px] text-slate-500 mt-1 font-medium">Espec. Funcional FTTH</p>
+                </div>
+
+                <div class="glass-card p-4 md:p-5 rounded-2xl md:rounded-3xl shadow-sm border-t-4 border-t-orange-500 bg-white">
+                    <div class="flex justify-between items-start mb-2">
+                        <p class="text-slate-500 text-[10px] font-bold uppercase tracking-tighter">Días Restantes</p>
+                        <i data-lucide="hourglass" class="w-4 h-4 text-orange-500"></i>
+                    </div>
+                    <p class="text-2xl md:text-3xl font-black text-slate-900">20</p>
+                    <p class="text-[10px] text-orange-600 mt-1 font-bold uppercase tracking-tight">Fase ATP iniciar FTTH</p>
+                </div>
+            </div>
+
+            <!-- Gráfico y Alcance -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 glass-card p-4 md:p-6 rounded-2xl md:rounded-3xl shadow-sm bg-white">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-bold text-base md:text-lg flex items-center gap-2">
+                            <i data-lucide="bar-chart-3" class="w-5 h-5 text-blue-600"></i>
+                            Avance Físico por Etapa
+                        </h3>
+                    </div>
+                    <div class="h-[200px] md:h-[240px]">
+                        <canvas id="mainProgressChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="glass-card p-4 md:p-6 rounded-2xl md:rounded-3xl shadow-sm bg-gradient-to-br from-white to-blue-50/50">
+                    <h3 class="font-bold text-base md:text-lg mb-4">Alcance del Proyecto</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-start gap-3">
+                            <div class="mt-1 bg-blue-100 p-1 rounded flex-shrink-0"><i data-lucide="target" class="w-3 h-3 text-blue-600"></i></div>
+                            <p class="text-[11px] md:text-xs leading-relaxed text-slate-600 font-medium italic">
+                                Unificar activación de telefonía FTTH y HFC, migrando de Nokia IMS a ZTE IMS.
+                            </p>
+                        </div>
+                        <div class="pt-4 border-t border-slate-100 space-y-2.5">
+                            <div class="flex justify-between items-center text-[10px] md:text-[11px]">
+                                <span class="text-slate-400 font-bold uppercase tracking-tighter">PM Client</span>
+                                <span class="font-bold text-slate-700">Rodrigo Cota</span>
+                            </div>
+                            <div class="flex justify-between items-center text-[10px] md:text-[11px]">
+                                <span class="text-slate-400 font-bold uppercase tracking-tighter">Tecnología</span>
+                                <span class="font-bold text-slate-700">IMS ZTE / GPON</span>
+                            </div>
+                            <div class="flex justify-between items-center text-[10px] md:text-[11px]">
+                                <span class="text-slate-400 font-bold uppercase tracking-tighter">Entorno</span>
+                                <span class="font-bold text-blue-600 uppercase">Laboratorio QA</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabla de Flujos (Simplificada para la demo) -->
+            <div class="glass-card rounded-2xl md:rounded-3xl shadow-sm overflow-hidden bg-white">
+                <div class="p-4 md:p-6 bg-white border-b border-slate-100">
+                    <h3 class="font-bold text-sm md:text-base flex items-center gap-2">
+                        <i data-lucide="list-checks" class="w-5 h-5 text-emerald-600"></i>
+                        Estatus de Flujos GPON
                     </h3>
                 </div>
-                <div class="h-[200px] md:h-[240px]">
-                    <canvas id="mainProgressChart"></canvas>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs md:text-sm">
+                        <thead class="bg-slate-50 text-slate-500 text-[10px] uppercase font-black tracking-widest">
+                            <tr>
+                                <th class="px-6 py-4">Operación</th>
+                                <th class="px-6 py-4">Flow ID</th>
+                                <th class="px-6 py-4 text-center">Progreso</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+                            <tr>
+                                <td class="px-6 py-4 font-bold text-slate-700">Alta de Servicio IMS</td>
+                                <td class="px-6 py-4 text-xs font-mono text-slate-400">RESIDENTIAL_VOICE.GPON.Create_IMS</td>
+                                <td class="px-6 py-4 text-center text-emerald-600 font-bold">90%</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 font-bold text-slate-700">Baja servicio de Telefonía</td>
+                                <td class="px-6 py-4 text-xs font-mono text-slate-400">RESIDENTIAL_VOICE.GPON.Service.Delete_IMS</td>
+                                <td class="px-6 py-4 text-center text-emerald-600 font-bold">90%</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-
-            <div class="glass-card p-4 md:p-6 rounded-2xl md:rounded-3xl shadow-sm bg-gradient-to-br from-white to-blue-50/50">
-                <h3 class="font-bold text-base md:text-lg mb-4">Alcance del Proyecto</h3>
-                <div class="space-y-4">
-                    <div class="flex items-start gap-3">
-                        <div class="mt-1 bg-blue-100 p-1 rounded flex-shrink-0"><i data-lucide="target" class="w-3 h-3 text-blue-600"></i></div>
-                        <p class="text-[11px] md:text-xs leading-relaxed text-slate-600 font-medium italic">
-                            Unificar activación de telefonía FTTH y HFC, migrando de Nokia IMS a ZTE IMS.
-                        </p>
-                    </div>
-                    <div class="pt-4 border-t border-slate-100 space-y-2.5">
-                        <div class="flex justify-between items-center text-[10px] md:text-[11px]">
-                            <span class="text-slate-400 font-bold uppercase tracking-tighter">PM Client</span>
-                            <span class="font-bold text-slate-700">Alberto Casarreal</span>
-                        </div>
-                        <div class="flex justify-between items-center text-[10px] md:text-[11px]">
-                            <span class="text-slate-400 font-bold uppercase tracking-tighter">Tecnología</span>
-                            <span class="font-bold text-slate-700">IMS ZTE / GPON</span>
-                        </div>
-                        <div class="flex justify-between items-center text-[10px] md:text-[11px]">
-                            <span class="text-slate-400 font-bold uppercase tracking-tighter">Entorno</span>
-                            <span class="font-bold text-blue-600 uppercase">Laboratorio QA</span>
-                        </div>
-                    </div>
-                    <div class="mt-4 p-3 md:p-4 rounded-xl bg-white border border-slate-200">
-                        <p class="text-[9px] font-bold text-slate-400 uppercase mb-1.5">Próxima Actividad</p>
-                        <div class="flex items-center gap-2 text-blue-700 font-bold text-xs leading-tight">
-                            <i data-lucide="alert-circle" class="w-4 h-4 flex-shrink-0"></i>
-                            Validar pruebas con cliente
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- PLANIFICACIÓN UAT RESPONSIVA -->
-        <section class="space-y-4">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                <h2 class="text-lg md:text-xl font-bold flex items-center gap-2 text-slate-800">
-                    <i data-lucide="layout-list" class="w-6 h-6 text-indigo-600"></i>
-                    Planificación Semanal UAT
-                </h2>
-                <span class="text-[9px] md:text-[10px] bg-white border border-slate-200 px-3 py-1 rounded-full font-bold text-slate-500 uppercase self-start sm:self-auto">Semana 16 - Abril</span>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <!-- LUNES -->
-                <div class="glass-card rounded-2xl md:rounded-3xl p-4 md:p-5 flex flex-col space-y-3 bg-blue-50/20 border-blue-100 shadow-sm">
-                    <div class="flex items-center justify-between border-b border-blue-100 pb-2">
-                        <span class="font-black text-blue-700 uppercase text-[10px] tracking-widest">Lunes 13</span>
-                        <i data-lucide="activity" class="w-4 h-4 text-blue-400"></i>
-                    </div>
-                    <div class="space-y-2">
-                        <div class="test-case p-2.5 bg-white rounded-xl shadow-sm border border-slate-50 text-[10px] md:text-[11px] font-bold text-slate-700 border-l-blue-500">Alta de Servicio</div>
-                        <div class="test-case p-2.5 bg-white rounded-xl shadow-sm border border-slate-50 text-[10px] md:text-[11px] font-bold text-slate-700 border-l-blue-500">Modify Call Features</div>
-                        <div class="test-case p-2.5 bg-white rounded-xl shadow-sm border border-slate-50 text-[10px] md:text-[11px] font-bold text-slate-700 border-l-blue-500">Baja de Servicio</div>
-                    </div>
-                </div>
-
-                <!-- MARTES -->
-                <div class="glass-card rounded-2xl md:rounded-3xl p-4 md:p-5 flex flex-col space-y-3 bg-indigo-50/20 border-indigo-100 shadow-sm">
-                    <div class="flex items-center justify-between border-b border-indigo-100 pb-2">
-                        <span class="font-black text-indigo-700 uppercase text-[10px] tracking-widest">Martes 14</span>
-                        <i data-lucide="phone-off" class="w-4 h-4 text-indigo-400"></i>
-                    </div>
-                    <div class="space-y-2">
-                        <div class="test-case p-2.5 bg-white rounded-xl shadow-sm border border-slate-50 text-[10px] md:text-[11px] font-bold text-slate-700 border-l-indigo-500">Suspensión</div>
-                        <div class="test-case p-2.5 bg-white rounded-xl shadow-sm border border-slate-50 text-[10px] md:text-[11px] font-bold text-slate-700 border-l-indigo-500">Suspensión voluntaria de Telefonia</div>
-                        <div class="test-case p-2.5 bg-white rounded-xl shadow-sm border border-slate-50 text-[10px] md:text-[11px] font-bold text-slate-700 border-l-indigo-500">Reactivación</div>
-                        <div class="test-case p-2.5 bg-white rounded-xl shadow-sm border border-slate-50 text-[10px] md:text-[11px] font-bold text-slate-700 border-l-indigo-500">Reactivación voluntaria de Telefonía</div>
-                    </div>
-                </div>
-
-                <!-- MIERCOLES -->
-                <div class="glass-card rounded-2xl md:rounded-3xl p-4 md:p-5 flex flex-col space-y-3 bg-purple-50/20 border-purple-100 shadow-sm">
-                    <div class="flex items-center justify-between border-b border-purple-100 pb-2">
-                        <span class="font-black text-purple-700 uppercase text-[10px] tracking-widest">Miércoles 15</span>
-                        <i data-lucide="refresh-cw" class="w-4 h-4 text-purple-400"></i>
-                    </div>
-                    <div class="space-y-2">
-                        <div class="test-case p-2.5 bg-white rounded-xl shadow-sm border border-slate-50 text-[10px] md:text-[11px] font-bold text-slate-700 border-l-purple-500">Cambio Equipo (ONT)</div>
-                        <div class="test-case p-2.5 bg-white rounded-xl shadow-sm border border-slate-50 text-[10px] md:text-[11px] font-bold text-slate-700 border-l-purple-500">Modify SIP Password</div>
-                    </div>
-                </div>
-
-                <!-- JUEVES -->
-                <div class="glass-card rounded-2xl md:rounded-3xl p-4 md:p-5 flex flex-col space-y-3 bg-orange-50/20 border-orange-100 shadow-sm">
-                    <div class="flex items-center justify-between border-b border-orange-100 pb-2">
-                        <span class="font-black text-orange-700 uppercase text-[10px] tracking-widest">Jueves 16</span>
-                        <i data-lucide="search" class="w-4 h-4 text-orange-400"></i>
-                    </div>
-                    <div class="space-y-2 text-[10px] md:text-[11px] font-bold text-orange-800 italic">
-                        <div class="test-case p-2.5 bg-white rounded-xl shadow-sm border border-slate-50 border-l-orange-500">Cambio de número de Teléfono</div>
-                        <div class="test-case p-2.5 bg-white rounded-xl shadow-sm border border-slate-50 border-l-orange-500">Query Voice Subscription</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- TABLA DE FLUJOS GPON RESPONSIVA -->
-        <div class="glass-card rounded-2xl md:rounded-3xl shadow-sm overflow-hidden bg-white">
-            <div class="p-4 md:p-6 bg-white border-b border-slate-100 flex justify-between items-center">
-                <h3 class="font-bold text-sm md:text-base flex items-center gap-2">
-                    <i data-lucide="list-checks" class="w-5 h-5 text-emerald-600"></i>
-                    Estatus de Flujos GPON
-                </h3>
-                <span class="text-[9px] text-slate-400 font-bold uppercase tracking-widest hidden sm:block">Datos de Sheet4.csv</span>
-            </div>
-            <div class="overflow-x-auto custom-scrollbar">
-                <table class="w-full text-left text-xs md:text-sm min-w-[700px]">
-                    <thead>
-                        <tr class="bg-slate-50 text-slate-500 text-[9px] md:text-[10px] uppercase font-black tracking-widest">
-                            <th class="px-6 py-4">Operación</th>
-                            <th class="px-6 py-4">Flow ID</th>
-                            <th class="px-6 py-4 text-center">Progreso</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-100">
-                        <tr class="hover:bg-slate-50/50 transition-colors">
-                            <td class="px-6 py-4 font-bold text-slate-700">Alta de Servicio IMS</td>
-                            <td class="px-6 py-4 text-xs font-mono text-slate-400">RESIDENTIAL_VOICE.GPON.Create_IMS</td>
-                            <td class="px-6 py-4">
-                                <div class="flex items-center gap-3">
-                                    <div class="flex-1 bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                                        <div class="bg-emerald-500 h-full progress-bar-glow" style="width: 90%"></div>
-                                    </div>
-                                    <span class="text-[10px] font-black text-emerald-600">90%</span>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr class="hover:bg-slate-50/50 transition-colors">
-                            <td class="px-6 py-4 font-bold text-slate-700">Modificación del servicio de Telefonía (Modify Call Features)*</td>
-                            <td class="px-6 py-4 text-xs font-mono text-slate-400">RESIDENTIAL_VOICE.GPON.Service.Modify_IMS</td>
-                            <td class="px-6 py-4">
-                                <div class="flex items-center gap-3">
-                                    <div class="flex-1 bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                                        <div class="bg-emerald-500 h-full progress-bar-glow" style="width: 90%"></div>
-                                    </div>
-                                    <span class="text-[10px] font-black text-emerald-600">90%</span>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr class="hover:bg-slate-50/50 transition-colors">
-                            <td class="px-6 py-4 font-bold text-slate-700">Baja servicio de Telefonía</td>
-                            <td class="px-6 py-4 text-xs font-mono text-slate-400">RESIDENTIAL_VOICE.GPON.Service.Delete_IMS</td>
-                            <td class="px-6 py-4">
-                                <div class="flex items-center gap-3">
-                                    <div class="flex-1 bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                                        <div class="bg-emerald-500 h-full progress-bar-glow" style="width: 90%"></div>
-                                    </div>
-                                    <span class="text-[10px] font-black text-emerald-600">90%</span>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr class="hover:bg-slate-50/50 transition-colors">
-                            <td class="px-6 py-4 font-bold text-slate-700">Baja servicio de Telefonía</td>
-                            <td class="px-6 py-4 text-xs font-mono text-slate-400">RESIDENTIAL_VOICE.GPON.Service.Delete.Button</td>
-                            <td class="px-6 py-4">
-                                <div class="flex items-center gap-3">
-                                    <div class="flex-1 bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                                        <div class="bg-emerald-500 h-full progress-bar-glow" style="width: 90%"></div>
-                                    </div>
-                                    <span class="text-[10px] font-black text-emerald-600">90%</span>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr class="hover:bg-slate-50/50 transition-colors">
-                            <td class="px-6 py-4 font-bold text-slate-700">Suspensión de servicio de Telefonía</td>
-                            <td class="px-6 py-4 text-xs font-mono text-slate-400">RESIDENTIAL_VOICE.GPON.Service.Suspend_IMS</td>
-                            <td class="px-6 py-4">
-                                <div class="flex items-center gap-3">
-                                    <div class="flex-1 bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                                        <div class="bg-emerald-500 h-full progress-bar-glow" style="width: 90%"></div>
-                                    </div>
-                                    <span class="text-[10px] font-black text-emerald-600">90%</span>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr class="hover:bg-slate-50/50 transition-colors">
-                            <td class="px-6 py-4 font-bold text-slate-700">Suspensión voluntaria de Telefonia</td>
-                            <td class="px-6 py-4 text-xs font-mono text-slate-400">RESIDENTIAL_VOICE.GPON.Service.Suspend_Button_IMS</td>
-                            <td class="px-6 py-4">
-                                <div class="flex items-center gap-3">
-                                    <div class="flex-1 bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                                        <div class="bg-emerald-500 h-full progress-bar-glow" style="width: 90%"></div>
-                                    </div>
-                                    <span class="text-[10px] font-black text-emerald-600">90%</span>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr class="hover:bg-slate-50/50 transition-colors">
-                            <td class="px-6 py-4 font-bold text-slate-700">Reactivación de servicio de Telefonía</td>
-                            <td class="px-6 py-4 text-xs font-mono text-slate-400">RESIDENTIAL_VOICE.GPON.Service.Resume_IMS</td>
-                            <td class="px-6 py-4">
-                                <div class="flex items-center gap-3">
-                                    <div class="flex-1 bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                                        <div class="bg-emerald-500 h-full progress-bar-glow" style="width: 90%"></div>
-                                    </div>
-                                    <span class="text-[10px] font-black text-emerald-600">90%</span>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr class="hover:bg-slate-50/50 transition-colors">
-                            <td class="px-6 py-4 font-bold text-slate-700">Reactivación voluntaria de Telefonía</td>
-                            <td class="px-6 py-4 text-xs font-mono text-slate-400">RESIDENTIAL_VOICE.GPON.Service.Resume_Button_IMS</td>
-                            <td class="px-6 py-4">
-                                <div class="flex items-center gap-3">
-                                    <div class="flex-1 bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                                        <div class="bg-emerald-500 h-full progress-bar-glow" style="width: 90%"></div>
-                                    </div>
-                                    <span class="text-[10px] font-black text-emerald-600">90%</span>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr class="hover:bg-slate-50/50 transition-colors">
-                            <td class="px-6 py-4 font-bold text-slate-700">Cambio de equipo (ONT)</td>
-                            <td class="px-6 py-4 text-xs font-mono text-slate-400">RESIDENTIAL_ACCESS.GPON.Equipment.Modify_NewModelOfONT</td>
-                            <td class="px-6 py-4">
-                                <div class="flex items-center gap-3">
-                                    <div class="flex-1 bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                                        <div class="bg-emerald-500 h-full progress-bar-glow" style="width: 90%"></div>
-                                    </div>
-                                    <span class="text-[10px] font-black text-emerald-600">90%</span>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr class="hover:bg-slate-50/50 transition-colors">
-                            <td class="px-6 py-4 font-bold text-slate-700">Modify Sip Password</td>
-                            <td class="px-6 py-4 text-xs font-mono text-slate-400">VOICE.GPON.ModifySIPPassword</td>
-                            <td class="px-6 py-4">
-                                <div class="flex items-center gap-3">
-                                    <div class="flex-1 bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                                        <div class="bg-emerald-500 h-full progress-bar-glow" style="width: 90%"></div>
-                                    </div>
-                                    <span class="text-[10px] font-black text-emerald-600">90%</span>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr class="hover:bg-slate-50/50 transition-colors">
-                            <td class="px-6 py-4 font-bold text-slate-700">Refresh de Servicio de Telefonía</td>
-                            <td class="px-6 py-4 text-xs font-mono text-slate-400">RESIDENTIAL_VOICE.GPON.Service.Refresh_IMS_0825</td>
-                            <td class="px-6 py-4">
-                                <div class="flex items-center gap-3">
-                                    <div class="flex-1 bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                                        <div class="bg-emerald-500 h-full progress-bar-glow" style="width: 90%"></div>
-                                    </div>
-                                    <span class="text-[10px] font-black text-emerald-600">90%</span>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr class="hover:bg-slate-50/50 transition-colors">
-                            <td class="px-6 py-4 font-bold text-slate-700">Cambio de Número (HFC/FTTH)</td>
-                            <td class="px-6 py-4 text-xs font-mono text-slate-400">RESIDENTIAL_VOICE.GPON.Equipment.Modify_IMS</td>
-                            <td class="px-6 py-4">
-                                <div class="flex items-center gap-3">
-                                    <div class="flex-1 bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                                        <div class="bg-amber-500 h-full progress-bar-glow" style="width: 80%"></div>
-                                    </div>
-                                    <span class="text-[10px] font-black text-amber-600">80%</span>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr class="hover:bg-slate-50/50 transition-colors">
-                            <td class="px-6 py-4 font-bold text-slate-700 text-slate-400">Query Voice Subscription</td>
-                            <td class="px-6 py-4 text-xs font-mono text-slate-300 italic">No existe el flujo aún</td>
-                            <td class="px-6 py-4">
-                                <div class="flex items-center gap-3">
-                                    <div class="flex-1 bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                                        <div class="bg-slate-300 h-full" style="width: 0%"></div>
-                                    </div>
-                                    <span class="text-[10px] font-black text-slate-400 text-center">N/A</span>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </main>
+        </main>
+    </div>
     
+    <!-- Scripts -->
+    <script>
+        // Inicializar Iconos
+        lucide.createIcons();
+
+        // Inicializar Gráfico
+        const ctx = document.getElementById('mainProgressChart');
+        if (ctx) {
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Kick-off', 'FDD HFC', 'FDD FTTH', 'Desarrollo', 'UAT/ATP'],
+                    datasets: [{
+                        label: '% Avance',
+                        data: [100, 100, 95, 40, 15],
+                        backgroundColor: 'rgba(79, 70, 229, 0.8)',
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, max: 100 }
+                    }
+                }
+            });
+        }
+    </script>
     <script src="js/script.js"></script>
+    <script src="js/authentication.js"></script>
 </body>
 </html>
