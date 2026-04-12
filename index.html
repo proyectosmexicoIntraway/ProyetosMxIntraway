@@ -37,8 +37,8 @@
         
         <!-- View for unauthenticated users -->
         <div id="logged-out-view" class="login-prompt text-center py-20">
-            <h2 class="text-3xl font-bold text-gray-800 mb-4">Bienvenido al Gestor de Proyectos</h2>
-            <p class="text-gray-600 mb-8 max-w-md mx-auto">Este es un espacio privado para la gestión y control de proyectos. Por favor, inicia sesión para acceder a las herramientas de PM.</p>
+            <h2 class="text-3xl font-bold text-gray-800 mb-4">Bienvenido al Gestor de Proyectos México</h2>
+            <p class="text-gray-600 mb-8 max-w-md mx-auto">Este es un espacio privado para la gestión y control de proyectos. Por favor, inicia sesión para acceder al Dashboard de los proyectos de México.</p>
             <div class="flex justify-center">
                 <div class="bg-white p-8 rounded-xl shadow-md border border-gray-100">
                     <button onclick="netlifyIdentity.open('login')" class="bg-indigo-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-indigo-700 transition-all">
@@ -70,14 +70,25 @@
                             <svg class="h-5 w-5" fill="currentColor" viewbox="0 0 20 20"><path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path></svg>
                         </button>
                     </div>
-                    <h3 class="font-bold text-lg mb-2">Rediseño de E-commerce</h3>
-                    <p class="text-gray-600 text-sm mb-4">Migración de plataforma y actualización de UI/UX para cliente retail.</p>
+                    <h3 class="font-bold text-lg mb-2">Proyectos iZZi Fija</h3>
+                    <p class="text-gray-600 text-sm mb-4">Listado General de Proyectos iZZi</p>
                     <div class="w-full bg-gray-200 rounded-full h-2 mb-4">
                         <div class="bg-indigo-600 h-2 rounded-full" style="width: 75%"></div>
                     </div>
-                    <div class="flex justify-between text-xs text-gray-400">
-                        <span>Progreso: 75%</span>
-                        <span>Día 12 de 20</span>
+                    <h3 class="font-bold text-lg mb-2">iZZi Mobile</h3>
+                    <p class="text-gray-600 text-sm mb-4">Listado General de Proyectos iZZi Mobile</p>
+                    <div class="w-full bg-gray-200 rounded-full h-2 mb-4">
+                        <div class="bg-indigo-600 h-2 rounded-full" style="width: 75%"></div>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">Proyectos Iniciados(Pendientes)/No iniciados - iZZi Fija</h3>
+                    <p class="text-gray-600 text-sm mb-4">Listado General de Proyectos iZZi Fija</p>
+                    <div class="w-full bg-gray-200 rounded-full h-2 mb-4">
+                        <div class="bg-indigo-600 h-2 rounded-full" style="width: 75%"></div>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">Bestel</h3>
+                    <p class="text-gray-600 text-sm mb-4">Listado General de Proyectos Bestel</p>
+                    <div class="w-full bg-gray-200 rounded-full h-2 mb-4">
+                        <div class="bg-indigo-600 h-2 rounded-full" style="width: 75%"></div>
                     </div>
                 </div>
                 
@@ -89,64 +100,6 @@
         </div>
     </main>
 
-    <script>
-        // DOM Elements
-        const authBtn = document.getElementById('auth-btn');
-        const userNameSpan = document.getElementById('user-name');
-        const body = document.body;
-
-        // Initialize Identity
-        netlifyIdentity.on('init', user => {
-            if (user) {
-                updateUI(user);
-            }
-        });
-
-        // Handle Login
-        netlifyIdentity.on('login', user => {
-            updateUI(user);
-            netlifyIdentity.close();
-        });
-
-        // Handle Logout
-        netlifyIdentity.on('logout', () => {
-            updateUI(null);
-        });
-
-        function updateUI(user) {
-            if (user) {
-                body.classList.add('authenticated');
-                authBtn.innerText = 'Cerrar Sesión';
-                authBtn.classList.replace('bg-indigo-600', 'bg-red-500');
-                authBtn.onclick = () => netlifyIdentity.logout();
-                userNameSpan.innerText = user.user_metadata.full_name || user.email;
-            } else {
-                body.classList.remove('authenticated');
-                authBtn.innerText = 'Acceder';
-                authBtn.classList.replace('bg-red-500', 'bg-indigo-600');
-                authBtn.onclick = () => netlifyIdentity.open();
-            }
-        }
-
-        function addProject() {
-            // Placeholder function for PM action
-            const title = prompt("Nombre del Proyecto:");
-            if(title) {
-                console.log("PM está creando:", title);
-                // Aquí iría la lógica para guardar en base de datos
-            }
-        }
-        
-        // Final script for redirect after sign up
-        if (window.netlifyIdentity) {
-          window.netlifyIdentity.on("init", user => {
-            if (!user) {
-              window.netlifyIdentity.on("login", () => {
-                document.location.href = "/";
-              });
-            }
-          });
-        }
-    </script>
+    <script src="js/app.js"></script>
 </body>
 </html>
