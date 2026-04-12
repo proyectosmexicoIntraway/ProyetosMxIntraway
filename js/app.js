@@ -1,3 +1,11 @@
+// Función para cerrar sesión y limpiar estado
+function handleLogout() {
+    netlifyIdentity.logout();
+}
+// Función para volver al index y asegurar que se pida el login
+function goToLogin() {
+    window.location.href = 'index.html?login=true';
+}
 // Inicializar Identity y verificar sesión
 netlifyIdentity.on('init', user => {
     if (user) {
@@ -7,16 +15,19 @@ netlifyIdentity.on('init', user => {
         showLoggedOut();
     }
 });
-
+// Eventos de sesión
+netlifyIdentity.on('login', user => {
+    document.body.classList.add('authenticated');
+    setupPageContent();
+});
 netlifyIdentity.on('logout', () => {
+    document.body.classList.remove('authenticated');
     window.location.href = 'index.html';
 });
-
 function showLoggedOut() {
     document.getElementById('logged-in-view').style.display = 'none';
     document.getElementById('logged-out-view').style.display = 'block';
 }
-
 function setupPageContent() {
     const path = window.location.pathname;
     const titleElement = document.getElementById('dynamic-title');
@@ -28,8 +39,13 @@ function setupPageContent() {
     else if (path.includes('bestel')) titleElement.innerText = 'Bestel';
     else titleElement.innerText = 'Detalle de Proyectos';
 }
-
-// Verificación fallback por si el init tarda
-setTimeout(() => {
-    if (!netlifyIdentity.currentUser()) showLoggedOut();
-}, 1500);
+// Verificación inicial de usuario actual
+window.addEventListener('load', () => {
+    const user = netlifyIdentity.currentUser();
+    if (user) {
+        document.body.classList.add('authenticated');
+        setupPageContent();
+    } else {
+        showLoggedOut();
+    }
+});
