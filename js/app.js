@@ -1,51 +1,57 @@
-// Función para cerrar sesión y limpiar estado
-function handleLogout() {
-    netlifyIdentity.logout();
+const authBtn = document.getElementById('auth-btn');
+const userDisplay = document.getElementById('user-display');
+const body = document.body;
+
+// Función segura para abrir el login
+function openLogin() {
+    if (netlifyIdentity) {
+        netlifyIdentity.open('login');
+    }
 }
-// Función para volver al index y asegurar que se pida el login
-function goToLogin() {
-    window.location.href = 'index.html?login=true';
-}
-// Inicializar Identity y verificar sesión
+
+// Inicializar widget
 netlifyIdentity.on('init', user => {
     if (user) {
-        document.body.classList.add('authenticated');
-        setupPageContent();
+        updateUI(user);
     } else {
-        showLoggedOut();
+        // Verificar si venimos redirigidos con intención de login
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('login') === 'true') {
+            openLogin();
+        }
     }
 });
-// Eventos de sesión
+
 netlifyIdentity.on('login', user => {
-    document.body.classList.add('authenticated');
-    setupPageContent();
+    updateUI(user);
+    netlifyIdentity.close();
+    // Limpiar URL de parámetros
+    window.history.replaceState({}, document.title, window.location.pathname);
 });
+
 netlifyIdentity.on('logout', () => {
-    document.body.classList.remove('authenticated');
-    window.location.href = 'index.html';
+    updateUI(null);
+    // Al desloguearse, forzamos que el widget esté listo para el siguiente
+    location.reload(); 
 });
-function showLoggedOut() {
-    document.getElementById('logged-in-view').style.display = 'none';
-    document.getElementById('logged-out-view').style.display = 'block';
+
+function updateUI(user) {
+    if (user) {
+        body.classList.add('authenticated');
+        authBtn.innerText = 'Cerrar Sesión';
+        authBtn.classList.replace('bg-indigo-600', 'bg-red-500');
+        authBtn.onclick = () => netlifyIdentity.logout();
+        userDisplay.innerText = user.user_metadata.full_name || user.email;
+    } else {
+        body.classList.remove('authenticated');
+        authBtn.innerText = 'Acceder';
+        authBtn.classList.replace('bg-red-500', 'bg-indigo-600');
+        authBtn.onclick = openLogin;
+    }
 }
-function setupPageContent() {
-    const path = window.location.pathname;
-    const titleElement = document.getElementById('dynamic-title');
-    document.getElementById('logged-in-view').style.display = 'block'
-    // Detectar automáticamente el nombre del archivo para cambiar el título
-    if (path.includes('izzi-fija')) titleElement.innerText = 'iZZi Fija';
-    else if (path.includes('izzi-mobile')) titleElement.innerText = 'iZZi Mobile';
-    else if (path.includes('pendientes')) titleElement.innerText = 'Pendientes / No Iniciados';
-    else if (path.includes('bestel')) titleElement.innerText = 'Bestel';
-    else titleElement.innerText = 'Detalle de Proyectos';
-}
-// Verificación inicial de usuario actual
+
+// Fallback por si el evento init no se dispara correctamente en re-ingresos
 window.addEventListener('load', () => {
     const user = netlifyIdentity.currentUser();
-    if (user) {
-        document.body.classList.add('authenticated');
-        setupPageContent();
-    } else {
-        showLoggedOut();
-    }
+    if (user) updateUI(user);
 });
