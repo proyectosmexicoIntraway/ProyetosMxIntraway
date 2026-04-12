@@ -3,126 +3,230 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalle de Vertical - PM Dashboard</title>
-    <!-- Tailwind CSS -->
+    <title>PM Dashboard - México</title>
+    <!-- Tailwind CSS para diseño moderno y responsivo -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Netlify Identity Widget -->
+    <!-- Netlify Identity Widget para el sistema de Login -->
     <script type="text/javascript" src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     <style>
+        /* Estados de visualización */
         .hidden-content { display: none; }
         .authenticated .hidden-content { display: block; }
         .authenticated .login-prompt { display: none; }
+        
+        /* Animaciones y efectos de tarjetas */
+        .project-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .project-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen font-sans">
 
-    <!-- Barra de Navegación Superior -->
+    <!-- Barra de Navegación -->
     <nav class="bg-white border-b border-slate-200 px-6 py-4 flex justify-between items-center sticky top-0 z-50">
-        <div class="flex items-center gap-4">
-            <a href="index.html" class="flex items-center gap-2 text-indigo-600 hover:text-indigo-800 transition-all font-bold">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+        <div class="flex items-center gap-3">
+            <div class="bg-indigo-600 p-2 rounded-xl text-white shadow-lg shadow-indigo-200">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                 </svg>
-                Volver
-            </a>
-            <h1 id="dynamic-title" class="text-xl font-black text-slate-800 border-l-2 border-slate-200 pl-4 uppercase tracking-tighter">
-                Cargando Vertical...
-            </h1>
+            </div>
+            <h1 class="text-xl font-black text-slate-800 tracking-tighter uppercase">PM Dashboard México</h1>
         </div>
         <div id="auth-controls">
-            <button onclick="netlifyIdentity.logout()" class="text-sm font-bold text-red-500 hover:text-red-700 uppercase tracking-widest">
-                Salir
+            <button onclick="openLogin()" id="auth-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-full transition-all font-bold text-sm shadow-md">
+                Acceder
             </button>
         </div>
     </nav>
 
+    <!-- Contenedor de Contenido -->
     <main class="max-w-7xl mx-auto p-6 lg:p-12">
         
-        <!-- Bloqueo si no hay sesión -->
-        <div id="logged-out-view" class="login-prompt text-center py-20">
-            <div class="bg-red-50 text-red-600 p-6 rounded-2xl inline-block mb-6 border border-red-100">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <!-- VISTA DE LOGIN (Se muestra si no hay sesión) -->
+        <div id="logged-out-view" class="login-prompt text-center py-20 animate-pulse">
+            <div class="mb-8 inline-block p-6 bg-white rounded-3xl shadow-xl border border-slate-100">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-indigo-600 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                 </svg>
-                <h2 class="text-xl font-bold">Acceso no autorizado</h2>
             </div>
-            <p class="text-slate-500 mb-8">Debes iniciar sesión en el dashboard principal para ver esta información.</p>
-            <a href="index.html" class="bg-indigo-600 text-white px-8 py-3 rounded-xl font-bold">Ir al Login</a>
+            <h2 class="text-4xl font-black text-slate-900 mb-4 tracking-tight">Acceso Privado PM</h2>
+            <p class="text-slate-500 mb-10 max-w-lg mx-auto text-lg leading-relaxed font-medium">
+                Bienvenido al centro de control operativo. Por favor, inicia sesión para gestionar las verticales de iZZi y Bestel.
+            </p>
+            <button onclick="openLogin()" class="bg-indigo-600 text-white px-12 py-4 rounded-2xl font-black hover:bg-indigo-700 transition-all text-lg shadow-xl shadow-indigo-100 uppercase tracking-widest">
+                Identificarse
+            </button>
         </div>
 
-        <!-- Contenido para el PM logueado -->
-        <div id="logged-in-view" class="hidden-content animate-in fade-in duration-500">
+        <!-- VISTA DASHBOARD (Solo para PMs autenticados) -->
+        <div id="logged-in-view" class="hidden-content">
+            <header class="mb-12">
+                <h2 class="text-3xl font-black text-slate-900 tracking-tight">Panel de Control de Proyectos</h2>
+                <p class="text-slate-500 font-medium mt-2">Hola, <span id="user-display" class="text-indigo-600 font-bold">Usuario</span>. Selecciona una categoría para ver detalles:</p>
+            </header>
 
-            <!-- Tabla de Datos -->
-            <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
-                <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-                    <h3 class="font-bold text-slate-800">Seguimiento Detallado</h3>
-                    <div class="flex gap-2">
-                        <button class="bg-white border border-slate-200 text-slate-600 px-4 py-2 rounded-lg text-xs font-bold hover:bg-slate-50 transition-all uppercase tracking-tighter">Exportar Excel</button>
-                        <button class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-xs font-bold hover:bg-indigo-700 transition-all uppercase tracking-tighter">+ Nuevo Registro</button>
+            <!-- Grid responsivo de 4 tarjetas -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-10">
+                
+                <!-- Tarjeta 1: iZZi Fija -->
+                <div onclick="window.location.href='proyectos-izzi-fija.html'" class="project-card bg-white p-8 rounded-[2rem] border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-6">
+                            <div class="bg-blue-50 p-4 rounded-2xl text-blue-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+                            </div>
+                            <span class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Vertical Fija</span>
+                        </div>
+                        <h3 class="font-black text-2xl text-slate-800 mb-2 uppercase tracking-tighter">Proyectos iZZi Fija</h3>
+                        <p class="text-slate-500 text-sm mb-8 font-medium">Listado General de Proyectos de infraestructura y planta externa iZZi.</p>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-xs font-bold mb-2">
+                            <span class="text-slate-400">Progreso Operativo</span>
+                            <span class="text-blue-600">75%</span>
+                        </div>
+                        <div class="w-full bg-slate-100 rounded-full h-3">
+                            <div class="bg-blue-600 h-3 rounded-full shadow-md shadow-blue-100" style="width: 75%"></div>
+                        </div>
                     </div>
                 </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left">
-                        <thead>
-                            <tr class="bg-slate-50 text-slate-400 text-[10px] font-black uppercase tracking-widest border-b border-slate-100">
-                                <th class="px-8 py-4">ID de Proyecto</th>
-                                <th class="px-8 py-4">Nombre de Iniciativa</th>
-                                <th class="px-8 py-4 text-right">Acción</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-100">
-                            <!-- Fila 1 -->
-                            <tr class="hover:bg-slate-50/80 transition-all group">
-                                <td class="px-8 py-5 text-sm font-mono text-indigo-600 font-bold">Proyectos iZZi Fija</td>
-                                <td class="px-8 py-5">
-                                    <p class="text-sm font-bold text-slate-800">Listado General de Proyectos iZZi</p>
-                                    <p class="text-xs text-slate-400">Responsable: PM - TeamLeader</p>
-                                </td>
-                                <td class="px-8 py-5 text-right">
-                                    <button class="text-indigo-600 hover:text-indigo-800 font-bold text-xs">Gestionar</button>
-                                </td>
-                            </tr>
-                            <!-- Fila 2 -->
-                            <tr class="hover:bg-slate-50/80 transition-all group">
-                                <td class="px-8 py-5 text-sm font-mono text-indigo-600 font-bold">Proyectos iZZi Mobile</td>
-                                <td class="px-8 py-5">
-                                    <p class="text-sm font-bold text-slate-800">Listado General de Proyectos iZZi Mobile</p>
-                                    <p class="text-xs text-slate-400">Responsable: PM - TeamLeader</p>
-                                </td>
-                                <td class="px-8 py-5 text-right">
-                                    <button class="text-indigo-600 hover:text-indigo-800 font-bold text-xs">Gestionar</button>
-                                </td>
-                            </tr>
-                            <!-- Fila 3 -->
-                            <tr class="hover:bg-slate-50/80 transition-all group">
-                                <td class="px-8 py-5 text-sm font-mono text-indigo-600 font-bold">Proyectos Bestel</td>
-                                <td class="px-8 py-5">
-                                    <p class="text-sm font-bold text-slate-800">Listado General de Proyectos Bestel</p>
-                                    <p class="text-xs text-slate-400">Responsable: PM - TeamLeader</p>
-                                </td>
-                                <td class="px-8 py-5 text-right">
-                                    <button class="text-indigo-600 hover:text-indigo-800 font-bold text-xs">Gestionar</button>
-                                </td>
-                            </tr>
-                            <!-- Fila 4 -->
-                            <tr class="hover:bg-slate-50/80 transition-all group">
-                                <td class="px-8 py-5 text-sm font-mono text-indigo-600 font-bold">Proyectos Iniciados(Pendientes)/No iniciados - iZZi Fija</td>
-                                <td class="px-8 py-5">
-                                    <p class="text-sm font-bold text-slate-800">Listado General de Proyectos iZZi Fija</p>
-                                    <p class="text-xs text-slate-400">Responsable: PM - TeamLeader</p>
-                                </td>
-                                <td class="px-8 py-5 text-right">
-                                    <button class="text-indigo-600 hover:text-indigo-800 font-bold text-xs">Gestionar</button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+
+                <!-- Tarjeta 2: iZZi Mobile -->
+                <div onclick="window.location.href='proyectos-izzi-mobile.html'" class="project-card bg-white p-8 rounded-[2rem] border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-6">
+                            <div class="bg-purple-50 p-4 rounded-2xl text-purple-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+                            </div>
+                            <span class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Vertical Móvil</span>
+                        </div>
+                        <h3 class="font-black text-2xl text-slate-800 mb-2 uppercase tracking-tighter">iZZi Mobile</h3>
+                        <p class="text-slate-500 text-sm mb-8 font-medium">Listado General de Proyectos de servicios inalámbricos y despliegue 5G.</p>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-xs font-bold mb-2">
+                            <span class="text-slate-400">Progreso Operativo</span>
+                            <span class="text-purple-600">60%</span>
+                        </div>
+                        <div class="w-full bg-slate-100 rounded-full h-3">
+                            <div class="bg-purple-600 h-3 rounded-full shadow-md shadow-purple-100" style="width: 60%"></div>
+                        </div>
+                    </div>
                 </div>
+
+                <!-- Tarjeta 3: Pendientes -->
+                <div onclick="window.location.href='proyectos-pendientes.html'" class="project-card bg-white p-8 rounded-[2rem] border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-6">
+                            <div class="bg-amber-50 p-4 rounded-2xl text-amber-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            </div>
+                            <span class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Status Alerta</span>
+                        </div>
+                        <h3 class="font-black text-2xl text-slate-800 mb-2 uppercase tracking-tighter">Iniciados / No iniciados</h3>
+                        <p class="text-slate-500 text-sm mb-8 font-medium">Control de proyectos iZZi Fija en fase de planeación o detenidos.</p>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-xs font-bold mb-2">
+                            <span class="text-slate-400">Proyectos Críticos</span>
+                            <span class="text-amber-600">30%</span>
+                        </div>
+                        <div class="w-full bg-slate-100 rounded-full h-3">
+                            <div class="bg-amber-500 h-3 rounded-full shadow-md shadow-amber-100" style="width: 30%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tarjeta 4: Bestel -->
+                <div onclick="window.location.href='proyectos-bestel.html'" class="project-card bg-white p-8 rounded-[2rem] border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-6">
+                            <div class="bg-emerald-50 p-4 rounded-2xl text-emerald-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                            </div>
+                            <span class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Empresas</span>
+                        </div>
+                        <h3 class="font-black text-2xl text-slate-800 mb-2 uppercase tracking-tighter">Bestel</h3>
+                        <p class="text-slate-500 text-sm mb-8 font-medium">Listado General de Proyectos corporativos y soluciones gubernamentales.</p>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-xs font-bold mb-2">
+                            <span class="text-slate-400">Progreso Operativo</span>
+                            <span class="text-emerald-600">90%</span>
+                        </div>
+                        <div class="w-full bg-slate-100 rounded-full h-3">
+                            <div class="bg-emerald-600 h-3 rounded-full shadow-md shadow-emerald-100" style="width: 90%"></div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </main>
 
-    <script src="js/app.js"></script>
+    <script>
+        const authBtn = document.getElementById('auth-btn');
+        const userDisplay = document.getElementById('user-display');
+        const body = document.body;
+
+        // Función segura para abrir el login
+        function openLogin() {
+            if (netlifyIdentity) {
+                netlifyIdentity.open('login');
+            }
+        }
+
+        // Inicializar widget
+        netlifyIdentity.on('init', user => {
+            if (user) {
+                updateUI(user);
+            } else {
+                // Verificar si venimos redirigidos con intención de login
+                const urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.get('login') === 'true') {
+                    openLogin();
+                }
+            }
+        });
+
+        netlifyIdentity.on('login', user => {
+            updateUI(user);
+            netlifyIdentity.close();
+            // Limpiar URL de parámetros
+            window.history.replaceState({}, document.title, window.location.pathname);
+        });
+
+        netlifyIdentity.on('logout', () => {
+            updateUI(null);
+            // Al desloguearse, forzamos que el widget esté listo para el siguiente
+            location.reload(); 
+        });
+
+        function updateUI(user) {
+            if (user) {
+                body.classList.add('authenticated');
+                authBtn.innerText = 'Cerrar Sesión';
+                authBtn.classList.replace('bg-indigo-600', 'bg-red-500');
+                authBtn.onclick = () => netlifyIdentity.logout();
+                userDisplay.innerText = user.user_metadata.full_name || user.email;
+            } else {
+                body.classList.remove('authenticated');
+                authBtn.innerText = 'Acceder';
+                authBtn.classList.replace('bg-red-500', 'bg-indigo-600');
+                authBtn.onclick = openLogin;
+            }
+        }
+
+        // Fallback por si el evento init no se dispara correctamente en re-ingresos
+        window.addEventListener('load', () => {
+            const user = netlifyIdentity.currentUser();
+            if (user) updateUI(user);
+        });
+    </script>
 </body>
 </html>
