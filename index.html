@@ -52,26 +52,6 @@
 
         <!-- Contenido para el PM logueado -->
         <div id="logged-in-view" class="hidden-content animate-in fade-in duration-500">
-            
-            <!-- Resumen de Estado -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
-                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-                    <p class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-1">Total Proyectos</p>
-                    <p class="text-3xl font-black text-slate-800">24</p>
-                </div>
-                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-                    <p class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-1">Completados</p>
-                    <p class="text-3xl font-black text-emerald-500">18</p>
-                </div>
-                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-                    <p class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-1">En Pausa</p>
-                    <p class="text-3xl font-black text-amber-500">4</p>
-                </div>
-                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-                    <p class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-1">Críticos</p>
-                    <p class="text-3xl font-black text-red-500">2</p>
-                </div>
-            </div>
 
             <!-- Tabla de Datos -->
             <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
@@ -88,38 +68,50 @@
                             <tr class="bg-slate-50 text-slate-400 text-[10px] font-black uppercase tracking-widest border-b border-slate-100">
                                 <th class="px-8 py-4">ID de Proyecto</th>
                                 <th class="px-8 py-4">Nombre de Iniciativa</th>
-                                <th class="px-8 py-4">Status</th>
-                                <th class="px-8 py-4">Deadline</th>
                                 <th class="px-8 py-4 text-right">Acción</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-100">
                             <!-- Fila 1 -->
                             <tr class="hover:bg-slate-50/80 transition-all group">
-                                <td class="px-8 py-5 text-sm font-mono text-indigo-600 font-bold">MX-IZI-2024-01</td>
+                                <td class="px-8 py-5 text-sm font-mono text-indigo-600 font-bold">Proyectos iZZi Fija</td>
                                 <td class="px-8 py-5">
-                                    <p class="text-sm font-bold text-slate-800">Ampliación de Red Fibra - Sector Norte</p>
-                                    <p class="text-xs text-slate-400">Responsable: Ing. Carlos Ruiz</p>
+                                    <p class="text-sm font-bold text-slate-800">Listado General de Proyectos iZZi</p>
+                                    <p class="text-xs text-slate-400">Responsable: PM - TeamLeader</p>
                                 </td>
-                                <td class="px-8 py-5">
-                                    <span class="bg-emerald-100 text-emerald-700 text-[10px] font-black px-3 py-1 rounded-full uppercase">Al Corriente</span>
-                                </td>
-                                <td class="px-8 py-5 text-sm text-slate-500 font-medium">15 May 2024</td>
                                 <td class="px-8 py-5 text-right">
                                     <button class="text-indigo-600 hover:text-indigo-800 font-bold text-xs">Gestionar</button>
                                 </td>
                             </tr>
                             <!-- Fila 2 -->
                             <tr class="hover:bg-slate-50/80 transition-all group">
-                                <td class="px-8 py-5 text-sm font-mono text-indigo-600 font-bold">MX-IZI-2024-05</td>
+                                <td class="px-8 py-5 text-sm font-mono text-indigo-600 font-bold">Proyectos iZZi Mobile</td>
                                 <td class="px-8 py-5">
-                                    <p class="text-sm font-bold text-slate-800">Migración Core Mobile 5G</p>
-                                    <p class="text-xs text-slate-400">Responsable: Lic. Ana Pérez</p>
+                                    <p class="text-sm font-bold text-slate-800">Listado General de Proyectos iZZi Mobile</p>
+                                    <p class="text-xs text-slate-400">Responsable: PM - TeamLeader</p>
                                 </td>
+                                <td class="px-8 py-5 text-right">
+                                    <button class="text-indigo-600 hover:text-indigo-800 font-bold text-xs">Gestionar</button>
+                                </td>
+                            </tr>
+                            <!-- Fila 3 -->
+                            <tr class="hover:bg-slate-50/80 transition-all group">
+                                <td class="px-8 py-5 text-sm font-mono text-indigo-600 font-bold">Proyectos Bestel</td>
                                 <td class="px-8 py-5">
-                                    <span class="bg-amber-100 text-amber-700 text-[10px] font-black px-3 py-1 rounded-full uppercase">Con Retraso</span>
+                                    <p class="text-sm font-bold text-slate-800">Listado General de Proyectos Bestel</p>
+                                    <p class="text-xs text-slate-400">Responsable: PM - TeamLeader</p>
                                 </td>
-                                <td class="px-8 py-5 text-sm text-slate-500 font-medium">02 Jun 2024</td>
+                                <td class="px-8 py-5 text-right">
+                                    <button class="text-indigo-600 hover:text-indigo-800 font-bold text-xs">Gestionar</button>
+                                </td>
+                            </tr>
+                            <!-- Fila 4 -->
+                            <tr class="hover:bg-slate-50/80 transition-all group">
+                                <td class="px-8 py-5 text-sm font-mono text-indigo-600 font-bold">Proyectos Iniciados(Pendientes)/No iniciados - iZZi Fija</td>
+                                <td class="px-8 py-5">
+                                    <p class="text-sm font-bold text-slate-800">Listado General de Proyectos iZZi Fija</p>
+                                    <p class="text-xs text-slate-400">Responsable: PM - TeamLeader</p>
+                                </td>
                                 <td class="px-8 py-5 text-right">
                                     <button class="text-indigo-600 hover:text-indigo-800 font-bold text-xs">Gestionar</button>
                                 </td>
@@ -131,43 +123,6 @@
         </div>
     </main>
 
-    <script>
-        // Inicializar Identity y verificar sesión
-        netlifyIdentity.on('init', user => {
-            if (user) {
-                document.body.classList.add('authenticated');
-                setupPageContent();
-            } else {
-                showLoggedOut();
-            }
-        });
-
-        netlifyIdentity.on('logout', () => {
-            window.location.href = 'index.html';
-        });
-
-        function showLoggedOut() {
-            document.getElementById('logged-in-view').style.display = 'none';
-            document.getElementById('logged-out-view').style.display = 'block';
-        }
-
-        function setupPageContent() {
-            const path = window.location.pathname;
-            const titleElement = document.getElementById('dynamic-title');
-            document.getElementById('logged-in-view').style.display = 'block';
-
-            // Detectar automáticamente el nombre del archivo para cambiar el título
-            if (path.includes('izzi-fija')) titleElement.innerText = 'iZZi Fija';
-            else if (path.includes('izzi-mobile')) titleElement.innerText = 'iZZi Mobile';
-            else if (path.includes('pendientes')) titleElement.innerText = 'Pendientes / No Iniciados';
-            else if (path.includes('bestel')) titleElement.innerText = 'Bestel';
-            else titleElement.innerText = 'Detalle de Proyectos';
-        }
-
-        // Verificación fallback por si el init tarda
-        setTimeout(() => {
-            if (!netlifyIdentity.currentUser()) showLoggedOut();
-        }, 1500);
-    </script>
+    <script src="js/app.js"></script>
 </body>
 </html>
