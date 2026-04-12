@@ -180,7 +180,70 @@
                 </div>
             </div>
 
-            <!-- Tabla de Flujos (Simplificada para la demo) -->
+        <!-- PLANIFICACIÓN UAT RESPONSIVA -->
+        <section class="space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <h2 class="text-lg md:text-xl font-bold flex items-center gap-2 text-slate-800">
+                    <i data-lucide="layout-list" class="w-6 h-6 text-indigo-600"></i>
+                    Planificación Semanal UAT
+                </h2>
+                <span class="text-[9px] md:text-[10px] bg-white border border-slate-200 px-3 py-1 rounded-full font-bold text-slate-500 uppercase self-start sm:self-auto">Semana 16 - Abril</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- LUNES -->
+                <div class="glass-card rounded-2xl md:rounded-3xl p-4 md:p-5 flex flex-col space-y-3 bg-blue-50/20 border-blue-100 shadow-sm">
+                    <div class="flex items-center justify-between border-b border-blue-100 pb-2">
+                        <span class="font-black text-blue-700 uppercase text-[10px] tracking-widest">Lunes 13</span>
+                        <i data-lucide="activity" class="w-4 h-4 text-blue-400"></i>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="test-case p-2.5 bg-white rounded-xl shadow-sm border border-slate-50 text-[10px] md:text-[11px] font-bold text-slate-700 border-l-blue-500">Alta de Servicio</div>
+                        <div class="test-case p-2.5 bg-white rounded-xl shadow-sm border border-slate-50 text-[10px] md:text-[11px] font-bold text-slate-700 border-l-blue-500">Modify Call Features</div>
+                        <div class="test-case p-2.5 bg-white rounded-xl shadow-sm border border-slate-50 text-[10px] md:text-[11px] font-bold text-slate-700 border-l-blue-500">Baja de Servicio</div>
+                    </div>
+                </div>
+
+                <!-- MARTES -->
+                <div class="glass-card rounded-2xl md:rounded-3xl p-4 md:p-5 flex flex-col space-y-3 bg-indigo-50/20 border-indigo-100 shadow-sm">
+                    <div class="flex items-center justify-between border-b border-indigo-100 pb-2">
+                        <span class="font-black text-indigo-700 uppercase text-[10px] tracking-widest">Martes 14</span>
+                        <i data-lucide="phone-off" class="w-4 h-4 text-indigo-400"></i>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="test-case p-2.5 bg-white rounded-xl shadow-sm border border-slate-50 text-[10px] md:text-[11px] font-bold text-slate-700 border-l-indigo-500">Suspensión</div>
+                        <div class="test-case p-2.5 bg-white rounded-xl shadow-sm border border-slate-50 text-[10px] md:text-[11px] font-bold text-slate-700 border-l-indigo-500">Suspensión voluntaria de Telefonia</div>
+                        <div class="test-case p-2.5 bg-white rounded-xl shadow-sm border border-slate-50 text-[10px] md:text-[11px] font-bold text-slate-700 border-l-indigo-500">Reactivación</div>
+                        <div class="test-case p-2.5 bg-white rounded-xl shadow-sm border border-slate-50 text-[10px] md:text-[11px] font-bold text-slate-700 border-l-indigo-500">Reactivación voluntaria de Telefonía</div>
+                    </div>
+                </div>
+
+                <!-- MIERCOLES -->
+                <div class="glass-card rounded-2xl md:rounded-3xl p-4 md:p-5 flex flex-col space-y-3 bg-purple-50/20 border-purple-100 shadow-sm">
+                    <div class="flex items-center justify-between border-b border-purple-100 pb-2">
+                        <span class="font-black text-purple-700 uppercase text-[10px] tracking-widest">Miércoles 15</span>
+                        <i data-lucide="refresh-cw" class="w-4 h-4 text-purple-400"></i>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="test-case p-2.5 bg-white rounded-xl shadow-sm border border-slate-50 text-[10px] md:text-[11px] font-bold text-slate-700 border-l-purple-500">Cambio Equipo (ONT)</div>
+                        <div class="test-case p-2.5 bg-white rounded-xl shadow-sm border border-slate-50 text-[10px] md:text-[11px] font-bold text-slate-700 border-l-purple-500">Modify SIP Password</div>
+                    </div>
+                </div>
+
+                <!-- JUEVES -->
+                <div class="glass-card rounded-2xl md:rounded-3xl p-4 md:p-5 flex flex-col space-y-3 bg-orange-50/20 border-orange-100 shadow-sm">
+                    <div class="flex items-center justify-between border-b border-orange-100 pb-2">
+                        <span class="font-black text-orange-700 uppercase text-[10px] tracking-widest">Jueves 16</span>
+                        <i data-lucide="search" class="w-4 h-4 text-orange-400"></i>
+                    </div>
+                    <div class="space-y-2 text-[10px] md:text-[11px] font-bold text-orange-800 italic">
+                        <div class="test-case p-2.5 bg-white rounded-xl shadow-sm border border-slate-50 border-l-orange-500">Cambio de número de Teléfono</div>
+                        <div class="test-case p-2.5 bg-white rounded-xl shadow-sm border border-slate-50 border-l-orange-500">Query Voice Subscription</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
             <!-- TABLA DE FLUJOS GPON RESPONSIVA -->
             <div class="glass-card rounded-2xl md:rounded-3xl shadow-sm overflow-hidden bg-white">
                 <div class="p-4 md:p-6 bg-white border-b border-slate-100 flex justify-between items-center">
