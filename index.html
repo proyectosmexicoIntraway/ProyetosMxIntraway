@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PM Project Manager - Login</title>
-    <!-- Tailwind CSS for modern UI -->
+    <title>Detalle de Vertical - PM Dashboard</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Netlify Identity Widget -->
     <script type="text/javascript" src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
@@ -14,148 +14,160 @@
         .authenticated .login-prompt { display: none; }
     </style>
 </head>
-<body class="bg-gray-50 min-h-screen font-sans">
+<body class="bg-slate-50 min-h-screen font-sans">
 
-    <!-- Navigation Bar -->
-    <nav class="bg-white shadow-sm border-b border-gray-200 px-6 py-4 flex justify-between items-center">
-        <h1 class="text-xl font-bold text-indigo-600 flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewbox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-            </svg>
-            PM Dashboard
-        </h1>
+    <!-- Barra de Navegación Superior -->
+    <nav class="bg-white border-b border-slate-200 px-6 py-4 flex justify-between items-center sticky top-0 z-50">
+        <div class="flex items-center gap-4">
+            <a href="index.html" class="flex items-center gap-2 text-indigo-600 hover:text-indigo-800 transition-all font-bold">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                </svg>
+                Volver
+            </a>
+            <h1 id="dynamic-title" class="text-xl font-black text-slate-800 border-l-2 border-slate-200 pl-4 uppercase tracking-tighter">
+                Cargando Vertical...
+            </h1>
+        </div>
         <div id="auth-controls">
-            <!-- Netlify Widget will inject buttons here or we trigger them via JS -->
-            <button onclick="netlifyIdentity.open()" id="auth-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg transition-colors font-medium">
-                Acceder
+            <button onclick="netlifyIdentity.logout()" class="text-sm font-bold text-red-500 hover:text-red-700 uppercase tracking-widest">
+                Salir
             </button>
         </div>
     </nav>
 
-    <!-- Main Content Container -->
-    <main class="max-w-6xl mx-auto p-6">
+    <main class="max-w-7xl mx-auto p-6 lg:p-12">
         
-        <!-- View for unauthenticated users -->
+        <!-- Bloqueo si no hay sesión -->
         <div id="logged-out-view" class="login-prompt text-center py-20">
-            <h2 class="text-3xl font-bold text-gray-800 mb-4">Bienvenido al Gestor de Proyectos México</h2>
-            <p class="text-gray-600 mb-8 max-w-md mx-auto">Este es un espacio privado para la gestión y control de proyectos. Por favor, inicia sesión para acceder al Dashboard de los proyectos de México.</p>
-            <div class="flex justify-center">
-                <div class="bg-white p-8 rounded-xl shadow-md border border-gray-100">
-                    <button onclick="netlifyIdentity.open('login')" class="bg-indigo-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-indigo-700 transition-all">
-                        Iniciar Sesión
-                    </button>
-                </div>
+            <div class="bg-red-50 text-red-600 p-6 rounded-2xl inline-block mb-6 border border-red-100">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+                <h2 class="text-xl font-bold">Acceso no autorizado</h2>
             </div>
+            <p class="text-slate-500 mb-8">Debes iniciar sesión en el dashboard principal para ver esta información.</p>
+            <a href="index.html" class="bg-indigo-600 text-white px-8 py-3 rounded-xl font-bold">Ir al Login</a>
         </div>
 
-        <!-- View for authenticated PMs -->
-        <div id="logged-in-view" class="hidden-content">
-            <header class="mb-8 flex justify-between items-end">
-                <div>
-                    <h2 class="text-2xl font-bold text-gray-800">Panel de Control de Proyectos</h2>
-                    <p id="user-welcome" class="text-gray-500">Hola, <span id="user-name">Usuario</span></p>
+        <!-- Contenido para el PM logueado -->
+        <div id="logged-in-view" class="hidden-content animate-in fade-in duration-500">
+            
+            <!-- Resumen de Estado -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                    <p class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-1">Total Proyectos</p>
+                    <p class="text-3xl font-black text-slate-800">24</p>
                 </div>
-            </header>
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                    <p class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-1">Completados</p>
+                    <p class="text-3xl font-black text-emerald-500">18</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                    <p class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-1">En Pausa</p>
+                    <p class="text-3xl font-black text-amber-500">4</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                    <p class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-1">Críticos</p>
+                    <p class="text-3xl font-black text-red-500">2</p>
+                </div>
+            </div>
 
-            <!-- Project Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="project-list">
-                <!-- Project Card Example -->
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
-                    <div class="flex justify-between items-start mb-4">
-                        <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">En Desarrollo</span>
-                        <button class="text-gray-400 hover:text-gray-600">
-                            <svg class="h-5 w-5" fill="currentColor" viewbox="0 0 20 20"><path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path></svg>
-                        </button>
+            <!-- Tabla de Datos -->
+            <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+                <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                    <h3 class="font-bold text-slate-800">Seguimiento Detallado</h3>
+                    <div class="flex gap-2">
+                        <button class="bg-white border border-slate-200 text-slate-600 px-4 py-2 rounded-lg text-xs font-bold hover:bg-slate-50 transition-all uppercase tracking-tighter">Exportar Excel</button>
+                        <button class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-xs font-bold hover:bg-indigo-700 transition-all uppercase tracking-tighter">+ Nuevo Registro</button>
                     </div>
-                    <h3 class="font-bold text-lg mb-2">Proyectos iZZi Fija</h3>
-                    <p class="text-gray-600 text-sm mb-4">Listado General de Proyectos iZZi</p>
-                    <div class="w-full bg-gray-200 rounded-full h-2 mb-4">
-                        <div class="bg-indigo-600 h-2 rounded-full" style="width: 75%"></div>
-                    </div>
-                    <h3 class="font-bold text-lg mb-2">iZZi Mobile</h3>
-                    <p class="text-gray-600 text-sm mb-4">Listado General de Proyectos iZZi Mobile</p>
-                    <div class="w-full bg-gray-200 rounded-full h-2 mb-4">
-                        <div class="bg-indigo-600 h-2 rounded-full" style="width: 75%"></div>
-                    </div>
-                    <h3 class="font-bold text-lg mb-2">Proyectos Iniciados(Pendientes)/No iniciados - iZZi Fija</h3>
-                    <p class="text-gray-600 text-sm mb-4">Listado General de Proyectos iZZi Fija</p>
-                    <div class="w-full bg-gray-200 rounded-full h-2 mb-4">
-                        <div class="bg-indigo-600 h-2 rounded-full" style="width: 75%"></div>
-                    </div>
-                    <h3 class="font-bold text-lg mb-2">Bestel</h3>
-                    <p class="text-gray-600 text-sm mb-4">Listado General de Proyectos Bestel</p>
-                    <div class="w-full bg-gray-200 rounded-full h-2 mb-4">
-                        <div class="bg-indigo-600 h-2 rounded-full" style="width: 75%"></div>
-                    </div>
-                </div>                
-            </div>
-             <!-- Project Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="project-list">
-                <!-- Project Card Example -->
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
-                    <div class="flex justify-between items-start mb-4">
-                        <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">En Desarrollo</span>
-                        <button class="text-gray-400 hover:text-gray-600">
-                            <svg class="h-5 w-5" fill="currentColor" viewbox="0 0 20 20"><path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path></svg>
-                        </button>
-                    </div>
-                    <h3 class="font-bold text-lg mb-2">Proyectos iZZi Fija</h3>
-                    <p class="text-gray-600 text-sm mb-4">Listado General de Proyectos iZZi</p>
-                    <div class="w-full bg-gray-200 rounded-full h-2 mb-4">
-                        <div class="bg-indigo-600 h-2 rounded-full" style="width: 75%"></div>
-                    </div>
-                    <h3 class="font-bold text-lg mb-2">iZZi Mobile</h3>
-                    <p class="text-gray-600 text-sm mb-4">Listado General de Proyectos iZZi Mobile</p>
-                    <div class="w-full bg-gray-200 rounded-full h-2 mb-4">
-                        <div class="bg-indigo-600 h-2 rounded-full" style="width: 75%"></div>
-                    </div>
-                    <h3 class="font-bold text-lg mb-2">Proyectos Iniciados(Pendientes)/No iniciados - iZZi Fija</h3>
-                    <p class="text-gray-600 text-sm mb-4">Listado General de Proyectos iZZi Fija</p>
-                    <div class="w-full bg-gray-200 rounded-full h-2 mb-4">
-                        <div class="bg-indigo-600 h-2 rounded-full" style="width: 75%"></div>
-                    </div>
-                    <h3 class="font-bold text-lg mb-2">Bestel</h3>
-                    <p class="text-gray-600 text-sm mb-4">Listado General de Proyectos Bestel</p>
-                    <div class="w-full bg-gray-200 rounded-full h-2 mb-4">
-                        <div class="bg-indigo-600 h-2 rounded-full" style="width: 75%"></div>
-                    </div>
-                </div>                
-            </div>
-             <!-- Project Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="project-list">
-                <!-- Project Card Example -->
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
-                    <div class="flex justify-between items-start mb-4">
-                        <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">En Desarrollo</span>
-                        <button class="text-gray-400 hover:text-gray-600">
-                            <svg class="h-5 w-5" fill="currentColor" viewbox="0 0 20 20"><path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path></svg>
-                        </button>
-                    </div>
-                    <h3 class="font-bold text-lg mb-2">Proyectos iZZi Fija</h3>
-                    <p class="text-gray-600 text-sm mb-4">Listado General de Proyectos iZZi</p>
-                    <div class="w-full bg-gray-200 rounded-full h-2 mb-4">
-                        <div class="bg-indigo-600 h-2 rounded-full" style="width: 75%"></div>
-                    </div>
-                    <h3 class="font-bold text-lg mb-2">iZZi Mobile</h3>
-                    <p class="text-gray-600 text-sm mb-4">Listado General de Proyectos iZZi Mobile</p>
-                    <div class="w-full bg-gray-200 rounded-full h-2 mb-4">
-                        <div class="bg-indigo-600 h-2 rounded-full" style="width: 75%"></div>
-                    </div>
-                    <h3 class="font-bold text-lg mb-2">Proyectos Iniciados(Pendientes)/No iniciados - iZZi Fija</h3>
-                    <p class="text-gray-600 text-sm mb-4">Listado General de Proyectos iZZi Fija</p>
-                    <div class="w-full bg-gray-200 rounded-full h-2 mb-4">
-                        <div class="bg-indigo-600 h-2 rounded-full" style="width: 75%"></div>
-                    </div>
-                    <h3 class="font-bold text-lg mb-2">Bestel</h3>
-                    <p class="text-gray-600 text-sm mb-4">Listado General de Proyectos Bestel</p>
-                    <div class="w-full bg-gray-200 rounded-full h-2 mb-4">
-                        <div class="bg-indigo-600 h-2 rounded-full" style="width: 75%"></div>
-                    </div>
-                </div>                
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="bg-slate-50 text-slate-400 text-[10px] font-black uppercase tracking-widest border-b border-slate-100">
+                                <th class="px-8 py-4">ID de Proyecto</th>
+                                <th class="px-8 py-4">Nombre de Iniciativa</th>
+                                <th class="px-8 py-4">Status</th>
+                                <th class="px-8 py-4">Deadline</th>
+                                <th class="px-8 py-4 text-right">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+                            <!-- Fila 1 -->
+                            <tr class="hover:bg-slate-50/80 transition-all group">
+                                <td class="px-8 py-5 text-sm font-mono text-indigo-600 font-bold">MX-IZI-2024-01</td>
+                                <td class="px-8 py-5">
+                                    <p class="text-sm font-bold text-slate-800">Ampliación de Red Fibra - Sector Norte</p>
+                                    <p class="text-xs text-slate-400">Responsable: Ing. Carlos Ruiz</p>
+                                </td>
+                                <td class="px-8 py-5">
+                                    <span class="bg-emerald-100 text-emerald-700 text-[10px] font-black px-3 py-1 rounded-full uppercase">Al Corriente</span>
+                                </td>
+                                <td class="px-8 py-5 text-sm text-slate-500 font-medium">15 May 2024</td>
+                                <td class="px-8 py-5 text-right">
+                                    <button class="text-indigo-600 hover:text-indigo-800 font-bold text-xs">Gestionar</button>
+                                </td>
+                            </tr>
+                            <!-- Fila 2 -->
+                            <tr class="hover:bg-slate-50/80 transition-all group">
+                                <td class="px-8 py-5 text-sm font-mono text-indigo-600 font-bold">MX-IZI-2024-05</td>
+                                <td class="px-8 py-5">
+                                    <p class="text-sm font-bold text-slate-800">Migración Core Mobile 5G</p>
+                                    <p class="text-xs text-slate-400">Responsable: Lic. Ana Pérez</p>
+                                </td>
+                                <td class="px-8 py-5">
+                                    <span class="bg-amber-100 text-amber-700 text-[10px] font-black px-3 py-1 rounded-full uppercase">Con Retraso</span>
+                                </td>
+                                <td class="px-8 py-5 text-sm text-slate-500 font-medium">02 Jun 2024</td>
+                                <td class="px-8 py-5 text-right">
+                                    <button class="text-indigo-600 hover:text-indigo-800 font-bold text-xs">Gestionar</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </main>
 
-    <script src="js/app.js"></script>
+    <script>
+        // Inicializar Identity y verificar sesión
+        netlifyIdentity.on('init', user => {
+            if (user) {
+                document.body.classList.add('authenticated');
+                setupPageContent();
+            } else {
+                showLoggedOut();
+            }
+        });
+
+        netlifyIdentity.on('logout', () => {
+            window.location.href = 'index.html';
+        });
+
+        function showLoggedOut() {
+            document.getElementById('logged-in-view').style.display = 'none';
+            document.getElementById('logged-out-view').style.display = 'block';
+        }
+
+        function setupPageContent() {
+            const path = window.location.pathname;
+            const titleElement = document.getElementById('dynamic-title');
+            document.getElementById('logged-in-view').style.display = 'block';
+
+            // Detectar automáticamente el nombre del archivo para cambiar el título
+            if (path.includes('izzi-fija')) titleElement.innerText = 'iZZi Fija';
+            else if (path.includes('izzi-mobile')) titleElement.innerText = 'iZZi Mobile';
+            else if (path.includes('pendientes')) titleElement.innerText = 'Pendientes / No Iniciados';
+            else if (path.includes('bestel')) titleElement.innerText = 'Bestel';
+            else titleElement.innerText = 'Detalle de Proyectos';
+        }
+
+        // Verificación fallback por si el init tarda
+        setTimeout(() => {
+            if (!netlifyIdentity.currentUser()) showLoggedOut();
+        }, 1500);
+    </script>
 </body>
 </html>
