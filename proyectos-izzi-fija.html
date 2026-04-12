@@ -8,39 +8,47 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Netlify Identity Widget -->
     <script type="text/javascript" src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        /* Estados de visualización controlados por el script central */
-        .hidden-content { display: none; }
-        .authenticated .hidden-content { display: block; }
-        .authenticated .login-prompt { display: none; }
+        /* Ocultar vistas por defecto */
+        #logged-in-view, #logged-out-view { display: none; }
         
+        /* Estado autenticado */
+        .auth-active #logged-in-view { display: block; }
+        .auth-active #logged-out-view { display: none !important; }
+        
+        /* Estado no autenticado */
+        .auth-inactive #logged-out-view { display: block; }
+
         .project-card {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
         }
         .project-card:hover {
             transform: translateY(-5px);
             border-color: #6366f1;
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
         }
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen font-sans text-slate-900">
 
     <!-- Navegación Responsiva -->
-    <nav class="bg-white border-b border-slate-200 px-4 md:px-8 py-4 flex justify-between items-center sticky top-0 z-50">
+    <nav class="bg-white border-b border-slate-200 px-4 md:px-8 py-3 flex justify-between items-center sticky top-0 z-[60]">
         <div class="flex items-center gap-3 md:gap-4">
             <a href="index.html" class="flex items-center gap-2 text-indigo-600 hover:text-indigo-800 transition-all font-bold group">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transform group-hover:-translate-x-1 transition-transform" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
-                </svg>
-                <span class="hidden sm:inline">Dashboard</span>
+                <i data-lucide="arrow-left" class="w-4 h-4 transform group-hover:-translate-x-1 transition-transform"></i>
+                <span class="hidden sm:inline text-xs">Dashboard</span>
             </a>
-            <h1 class="text-lg md:text-xl font-black text-slate-800 border-l-2 border-slate-200 pl-3 md:pl-4 uppercase tracking-tighter">
+            <div class="h-4 w-[1px] bg-slate-200"></div>
+            <h1 class="text-sm md:text-base font-black text-slate-800 uppercase tracking-tighter">
                 iZZi Fija
             </h1>
         </div>
-        <div id="auth-controls">
-            <!-- El id "auth-btn" es requerido por authentication.js -->
-            <button id="auth-btn" class="text-[10px] md:text-xs font-bold text-red-500 hover:text-red-700 uppercase tracking-widest border border-red-100 px-3 py-1.5 rounded-lg hover:bg-red-50 transition-all">
+        
+        <div class="flex items-center gap-4">
+            <span id="user-display" class="hidden md:inline text-[9px] font-bold text-slate-400 uppercase tracking-widest"></span>
+            <button id="auth-btn" onclick="handleAuthAction()" class="text-[10px] font-bold text-red-500 hover:text-red-700 uppercase tracking-widest border border-red-100 px-3 py-1.5 rounded-lg hover:bg-red-50 transition-all">
                 Cerrar Sesión
             </button>
         </div>
@@ -48,47 +56,43 @@
 
     <main class="max-w-7xl mx-auto p-4 md:p-8 lg:p-12">
         
-        <!-- VISTA DE LOGOUT (Requerida por authentication.js) -->
-        <div id="logged-out-view" class="login-prompt text-center py-20" style="display: none;">
+        <!-- VISTA DE LOGOUT -->
+        <div id="logged-out-view" class="text-center py-20 px-4">
             <div class="bg-white p-8 md:p-12 rounded-[2.5rem] shadow-2xl shadow-slate-200 border border-slate-100 inline-block max-w-sm w-full">
                 <div class="bg-indigo-50 text-indigo-600 p-5 rounded-3xl mb-6 inline-block">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                    </svg>
+                    <i data-lucide="lock" class="w-10 h-10"></i>
                 </div>
                 <h2 class="text-2xl font-black text-slate-800 mb-3 uppercase tracking-tight">Acceso Privado</h2>
-                <p class="text-slate-500 mb-8 text-sm font-medium">Esta sección contiene datos sensibles. Por favor identifícate en la página principal.</p>
-                <button onclick="window.location.href='index.html?login=true'" class="w-full bg-indigo-600 text-white px-8 py-4 rounded-2xl font-black hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100 uppercase tracking-widest text-sm">
-                    Ir al Identificador
+                <p class="text-slate-500 mb-8 text-sm font-medium">Esta sección requiere identificación previa.</p>
+                <button onclick="window.location.href='index.html'" class="w-full bg-indigo-600 text-white px-8 py-4 rounded-2xl font-black hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100 uppercase tracking-widest text-sm">
+                    Ir al Inicio
                 </button>
             </div>
         </div>
 
-        <!-- VISTA DE LOGIN (Requerida por authentication.js) -->
-        <div id="logged-in-view" class="hidden-content animate-in fade-in slide-in-from-bottom-4 duration-700">
+        <!-- VISTA DE LOGIN (CONTENIDO PROTEGIDO) -->
+        <div id="logged-in-view" class="animate-in fade-in slide-in-from-bottom-4 duration-700">
             
             <header class="mb-10">
-                <span class="text-indigo-600 font-bold text-[10px] md:text-xs uppercase tracking-[0.3em] mb-2 block">Proyectos Estratégicos</span>
+                <span class="text-indigo-600 font-bold text-[10px] md:text-xs uppercase tracking-[0.3em] mb-2 block font-mono">Proyectos Estratégicos</span>
                 <h2 class="text-3xl md:text-5xl font-black text-slate-900 tracking-tighter uppercase">Infraestructura Fija</h2>
-                <p class="text-slate-500 font-medium mt-3 text-sm md:text-base">Gestión de despliegue rOLTs, IMS ZTE y mantenimiento preventivo.</p>
+                <p class="text-slate-500 font-medium mt-3 text-sm md:text-base max-w-2xl">Gestión de despliegue rOLTs, IMS ZTE y mantenimiento preventivo para el ecosistema Symphonica.</p>
             </header>
 
             <!-- Grid de Proyectos -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-12">
                 
                 <!-- rOLTs -->
-                <div div onclick="window.location.href='rolts-izzi-fija.html'"class="project-card bg-white rounded-[2.5rem] border border-slate-200 shadow-sm p-8 flex flex-col justify-between">
+                <div onclick="window.location.href='rolts-izzi-fija.html'" class="project-card bg-white rounded-[2.5rem] border border-slate-200 p-8 flex flex-col justify-between">
                     <div>
                         <div class="flex justify-between items-start mb-6">
                             <div class="bg-blue-50 text-blue-600 p-4 rounded-2xl">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2" />
-                                </svg>
+                                <i data-lucide="server" class="w-7 h-7"></i>
                             </div>
                             <span class="bg-blue-100 text-blue-700 text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-tighter">Activo</span>
                         </div>
                         <h3 class="text-2xl font-black text-slate-800 mb-3 tracking-tighter uppercase">rOLTs</h3>
-                        <p class="text-slate-500 text-sm font-medium mb-8">Despliegue y optimización de terminales de línea óptica remotas.</p>
+                        <p class="text-slate-500 text-sm font-medium mb-8 leading-relaxed">Despliegue y optimización de terminales de línea óptica remotas.</p>
                     </div>
                     <div class="space-y-4">
                         <div class="flex justify-between text-[10px] font-black uppercase tracking-widest text-slate-400">
@@ -102,18 +106,16 @@
                 </div>
 
                 <!-- Symphonica IMS ZTE -->
-                <div div onclick="window.location.href='ims-zte-izzi-fija.html'" class="project-card bg-white rounded-[2.5rem] border border-slate-200 shadow-sm p-8 flex flex-col justify-between">
+                <div onclick="window.location.href='ims-zte-izzi-fija.html'" class="project-card bg-white rounded-[2.5rem] border border-slate-200 p-8 flex flex-col justify-between">
                     <div>
                         <div class="flex justify-between items-start mb-6">
                             <div class="bg-purple-50 text-purple-600 p-4 rounded-2xl">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                                </svg>
+                                <i data-lucide="phone-forwarded" class="w-7 h-7"></i>
                             </div>
                             <span class="bg-purple-100 text-purple-700 text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-tighter">Telefonía</span>
                         </div>
                         <h3 class="text-2xl font-black text-slate-800 mb-3 tracking-tighter uppercase">IMS ZTE</h3>
-                        <p class="text-slate-500 text-sm font-medium mb-8">Symphonica: Implementación del nuevo servicio de telefonía IMS.</p>
+                        <p class="text-slate-500 text-sm font-medium mb-8 leading-relaxed">Symphonica: Implementación del nuevo servicio de telefonía IMS.</p>
                     </div>
                     <div class="space-y-4">
                         <div class="flex justify-between text-[10px] font-black uppercase tracking-widest text-slate-400">
@@ -127,18 +129,16 @@
                 </div>
 
                 <!-- Mantenimiento 2026 -->
-                <div onclick="window.location.href='mantenimiento-evolutivo-h1-izzi-fija.html'" class="project-card bg-white rounded-[2.5rem] border border-slate-200 shadow-sm p-8 flex flex-col justify-between">
+                <div onclick="window.location.href='mantenimiento-evolutivo-h1-izzi-fija.html'" class="project-card bg-white rounded-[2.5rem] border border-slate-200 p-8 flex flex-col justify-between">
                     <div>
                         <div class="flex justify-between items-start mb-6">
                             <div class="bg-emerald-50 text-emerald-600 p-4 rounded-2xl">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                                </svg>
+                                <i data-lucide="shield-check" class="w-7 h-7"></i>
                             </div>
                             <span class="bg-emerald-100 text-emerald-700 text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-tighter">H1-2026</span>
                         </div>
                         <h3 class="text-2xl font-black text-slate-800 mb-3 tracking-tighter uppercase">Manto. Evolutivo</h3>
-                        <p class="text-slate-500 text-sm font-medium mb-8">Symphonica: Mantenimiento Preventivo & Correctivo programado.</p>
+                        <p class="text-slate-500 text-sm font-medium mb-8 leading-relaxed">Symphonica: Mantenimiento Preventivo & Correctivo programado.</p>
                     </div>
                     <div class="space-y-4">
                         <div class="flex justify-between text-[10px] font-black uppercase tracking-widest text-slate-400">
@@ -154,8 +154,59 @@
             </div>
         </div>
     </main>
+    
+    <script>
+        // Función para cambiar la vista
+        function setView(isAuthenticated, method = "") {
+            if (isAuthenticated) {
+                document.body.classList.add('auth-active');
+                document.body.classList.remove('auth-inactive');
+                const userDisplay = document.getElementById('user-display');
+                if(userDisplay) {
+                    userDisplay.innerText = method || "Usuario Conectado";
+                    userDisplay.classList.remove('hidden');
+                }
+                lucide.createIcons();
+            } else {
+                document.body.classList.add('auth-inactive');
+                document.body.classList.remove('auth-active');
+            }
+        }
 
+        // CONTROL LOCAL INMEDIATO
+        const hostname = window.location.hostname;
+        const isLocal = hostname === "localhost" || hostname === "127.0.0.1";
+
+        if (isLocal) {
+            console.log("🛠️ Local detected - Vertical view");
+            setView(true, "MODO DESARROLLO");
+        } else {
+            // Netlify Identity
+            if (window.netlifyIdentity) {
+                netlifyIdentity.on('init', user => {
+                    if (user) setView(true, user.email);
+                    else setView(false);
+                });
+                netlifyIdentity.on('login', user => {
+                    setView(true, user.email);
+                });
+                netlifyIdentity.on('logout', () => setView(false));
+            }
+        }
+
+        function handleAuthAction() {
+            if (isLocal) {
+                alert("Sesión local persistente.");
+            } else if (window.netlifyIdentity) {
+                netlifyIdentity.logout();
+            }
+        }
+
+        // Inicializar iconos básicos
+        lucide.createIcons();
+    </script>
+    
     <!-- Carga del script centralizado desde el directorio js/ -->
-    <script src="js/authentication.js"></script>
+    <!--script src="js/authentication.js"></!--script-->
 </body>
 </html>

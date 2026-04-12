@@ -4,128 +4,161 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PM Dashboard - México</title>
-    <!-- Tailwind CSS para diseño moderno y responsivo -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Netlify Identity Widget para el sistema de Login -->
+    <!-- Netlify Identity Widget -->
     <script type="text/javascript" src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <!-- Iconos Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        /* Estados de visualización */
-        .hidden-content { display: none; }
-        .authenticated .hidden-content { display: block; }
-        .authenticated .login-prompt { display: none; }
+        /* Estados de visualización controlados por JS */
+        #logged-in-view, #logged-out-view { display: none; }
         
-        /* Animaciones y efectos de tarjetas */
+        .auth-active #logged-in-view { display: block; }
+        .auth-active #logged-out-view { display: none !important; }
+        
+        .auth-inactive #logged-out-view { display: block; }
+        .auth-inactive #logged-in-view { display: none !important; }
+
         .project-card {
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
         }
         .project-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            border-color: #6366f1;
+            box-shadow: 0 25px 50px -12px rgba(99, 102, 241, 0.15);
+        }
+        
+        .nav-gradient {
+            background: linear-gradient(to right, #ffffff, #f8fafc);
         }
     </style>
 </head>
-<body class="bg-slate-50 min-h-screen font-sans">
+<body class="bg-slate-50 min-h-screen font-sans text-slate-900">
 
     <!-- Barra de Navegación -->
-    <nav class="bg-white border-b border-slate-200 px-6 py-4 flex justify-between items-center sticky top-0 z-50">
-        <div class="flex items-center gap-3">
-            <div class="bg-indigo-600 p-2 rounded-xl text-white shadow-lg shadow-indigo-200">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                </svg>
+    <nav class="nav-gradient border-b border-slate-200 px-6 py-4 flex justify-between items-center sticky top-0 z-[100]">
+        <div class="flex items-center gap-4">
+            <div class="bg-indigo-600 p-2.5 rounded-2xl text-white shadow-lg shadow-indigo-100">
+                <i data-lucide="layout-dashboard" class="w-6 h-6"></i>
             </div>
-            <h1 class="text-xl font-black text-slate-800 tracking-tighter uppercase">PM Dashboard México</h1>
+            <div>
+                <h1 class="text-lg font-black text-slate-800 tracking-tighter uppercase leading-none">PM Dashboard</h1>
+                <span class="text-[10px] font-bold text-indigo-500 uppercase tracking-[0.2em]">México Ops</span>
+            </div>
         </div>
-        <div id="auth-controls">
-            <button onclick="openLogin()" id="auth-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-full transition-all font-bold text-sm shadow-md">
+        
+        <div id="auth-controls" class="flex items-center gap-4">
+            <span id="user-email" class="hidden md:inline text-[10px] font-black text-slate-400 uppercase tracking-widest border-r border-slate-200 pr-4"></span>
+            <button id="auth-btn" onclick="handleAuthAction()" class="bg-slate-900 hover:bg-indigo-600 text-white px-6 py-2.5 rounded-xl transition-all font-bold text-xs uppercase tracking-widest shadow-sm">
                 Acceder
             </button>
         </div>
     </nav>
 
-    <!-- Contenedor de Contenido -->
+    <!-- Contenedor Principal -->
     <main class="max-w-7xl mx-auto p-6 lg:p-12">
         
-        <!-- VISTA DE LOGIN (Se muestra si no hay sesión) -->
-        <div id="logged-out-view" class="login-prompt text-center py-20 animate-pulse">
-            <div class="mb-8 inline-block p-6 bg-white rounded-3xl shadow-xl border border-slate-100">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-indigo-600 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                </svg>
+        <!-- VISTA DE LOGOUT (Login Prompt) -->
+        <div id="logged-out-view" class="text-center py-20 animate-in fade-in duration-700">
+            <div class="mb-8 inline-block p-8 bg-white rounded-[3rem] shadow-2xl shadow-slate-200 border border-slate-50 relative">
+                <div class="absolute -top-4 -right-4 bg-indigo-600 text-white p-3 rounded-2xl shadow-lg">
+                    <i data-lucide="shield-check" class="w-6 h-6"></i>
+                </div>
+                <i data-lucide="lock" class="w-16 h-16 text-slate-200"></i>
             </div>
-            <h2 class="text-4xl font-black text-slate-900 mb-4 tracking-tight">Acceso Privado PM</h2>
-            <p class="text-slate-500 mb-10 max-w-lg mx-auto text-lg leading-relaxed font-medium">
-                Bienvenido al centro de control operativo. Por favor, inicia sesión para gestionar las verticales de iZZi y Bestel.
+            <h2 class="text-4xl md:text-5xl font-black text-slate-900 mb-4 tracking-tighter uppercase">Acceso Privado</h2>
+            <p class="text-slate-500 mb-10 max-w-lg mx-auto text-base md:text-lg font-medium leading-relaxed">
+                Panel restringido para Project Managers. Por favor, identifícate para gestionar las verticales operativas.
             </p>
-            <button onclick="openLogin()" class="bg-indigo-600 text-white px-12 py-4 rounded-2xl font-black hover:bg-indigo-700 transition-all text-lg shadow-xl shadow-indigo-100 uppercase tracking-widest">
-                Identificarse
+            <button onclick="handleAuthAction()" class="group bg-indigo-600 text-white px-10 py-5 rounded-[2rem] font-black hover:bg-indigo-700 transition-all text-sm shadow-2xl shadow-indigo-200 uppercase tracking-[0.2em] flex items-center gap-3 mx-auto">
+                Iniciar Sesión 
+                <i data-lucide="chevron-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
             </button>
         </div>
 
-        <!-- VISTA DASHBOARD (Solo para PMs autenticados) -->
-        <div id="logged-in-view" class="hidden-content">
+        <!-- VISTA DASHBOARD (Autenticado) -->
+        <div id="logged-in-view" class="animate-in fade-in slide-in-from-bottom-8 duration-1000">
             <header class="mb-12">
-                <h2 class="text-3xl font-black text-slate-900 tracking-tight">Panel de Control de Proyectos</h2>
-                <p class="text-slate-500 font-medium mt-2">Hola, <span id="user-display" class="text-indigo-600 font-bold">Usuario</span>. Selecciona una categoría para ver detalles:</p>
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="w-8 h-[2px] bg-indigo-600"></span>
+                    <span class="text-indigo-600 font-bold text-xs uppercase tracking-[0.3em]">Centro de Control</span>
+                </div>
+                <h2 class="text-4xl md:text-5xl font-black text-slate-900 tracking-tighter uppercase">Panel de Proyectos</h2>
+                <p class="text-slate-500 font-medium mt-4 text-sm md:text-base">Bienvenido de nuevo. Selecciona una vertical para gestionar el despliegue:</p>
             </header>
 
-            <!-- Grid responsivo de 4 tarjetas -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-10">
+            <!-- Grid de Categorías -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
                 
-                <!-- Tarjeta 1: iZZi Fija -->
-                <div onclick="window.location.href='proyectos-izzi-fija.html'" class="project-card bg-white p-8 rounded-[2rem] border border-slate-200 shadow-sm flex flex-col justify-between">
+                <!-- iZZi Fija -->
+                <div onclick="window.location.href='proyectos-izzi-fija.html'" class="project-card bg-white p-10 rounded-[3rem] border border-slate-100 shadow-sm flex flex-col justify-between group">
                     <div>
-                        <div class="flex justify-between items-center mb-6">
-                            <div class="bg-blue-50 p-4 rounded-2xl text-blue-600">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+                        <div class="flex justify-between items-start mb-10">
+                            <div class="bg-blue-50 p-5 rounded-[1.5rem] text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-500">
+                                <i data-lucide="building-2" class="w-8 h-8"></i>
                             </div>
-                            <span class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">iZZi Fija</span>
+                            <div class="flex flex-col items-end">
+                                <span class="bg-blue-100 text-blue-700 text-[9px] font-black px-3 py-1 rounded-full uppercase">iZZi Fija</span>
+                            </div>
                         </div>
-                        <h3 class="font-black text-2xl text-slate-800 mb-2 uppercase tracking-tighter">Proyectos iZZi Fija</h3>
-                        <p class="text-slate-500 text-sm mb-8 font-medium">Listado General de Proyectos de iZZi red Fija.</p>
+                        <h3 class="font-black text-3xl text-slate-800 mb-3 uppercase tracking-tighter">iZZi Fija</h3>
+                        <p class="text-slate-400 text-sm font-medium leading-relaxed mb-6">Infraestructura, rOLTs y servicios de red fija nacional.</p>
+                    </div>
+                    <div class="flex items-center text-blue-600 font-bold text-xs uppercase tracking-widest gap-2">
+                        Ver Proyectos <i data-lucide="arrow-right" class="w-4 h-4"></i>
                     </div>
                 </div>
 
-                <!-- Tarjeta 2: iZZi Mobile -->
-                <div onclick="window.location.href='proyectos-izzi-mobile.html'" class="project-card bg-white p-8 rounded-[2rem] border border-slate-200 shadow-sm flex flex-col justify-between">
+                <!-- iZZi Mobile -->
+                <div onclick="window.location.href='proyectos-izzi-mobile.html'" class="project-card bg-white p-10 rounded-[3rem] border border-slate-100 shadow-sm flex flex-col justify-between group">
                     <div>
-                        <div class="flex justify-between items-center mb-6">
-                            <div class="bg-purple-50 p-4 rounded-2xl text-purple-600">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+                        <div class="flex justify-between items-start mb-10">
+                            <div class="bg-purple-50 p-5 rounded-[1.5rem] text-purple-600 group-hover:bg-purple-600 group-hover:text-white transition-colors duration-500">
+                                <i data-lucide="smartphone" class="w-8 h-8"></i>
                             </div>
-                            <span class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">iZZi Mobile</span>
+                            <span class="bg-purple-50 text-purple-700 text-[9px] font-black px-3 py-1 rounded-full uppercase">iZZi Mobile</span>
                         </div>
-                        <h3 class="font-black text-2xl text-slate-800 mb-2 uppercase tracking-tighter">iZZi Mobile</h3>
-                        <p class="text-slate-500 text-sm mb-8 font-medium">Listado General de Proyectos de servicios Mobile.</p>
+                        <h3 class="font-black text-3xl text-slate-800 mb-3 uppercase tracking-tighter">iZZi Mobile</h3>
+                        <p class="text-slate-400 text-sm font-medium leading-relaxed mb-6">Despliegue móvil, MVNO y servicios de conectividad celular.</p>
+                    </div>
+                    <div class="flex items-center text-purple-600 font-bold text-xs uppercase tracking-widest gap-2">
+                        Ver Proyectos <i data-lucide="arrow-right" class="w-4 h-4"></i>
                     </div>
                 </div>
 
-                <!-- Tarjeta 3: Pendientes -->
-                <div onclick="window.location.href='proyectos-pendientes.html'" class="project-card bg-white p-8 rounded-[2rem] border border-slate-200 shadow-sm flex flex-col justify-between">
+                <!-- Pendientes/Alertas -->
+                <div onclick="window.location.href='proyectos-pendientes.html'" class="project-card bg-white p-10 rounded-[3rem] border border-slate-100 shadow-sm flex flex-col justify-between group">
                     <div>
-                        <div class="flex justify-between items-center mb-6">
-                            <div class="bg-amber-50 p-4 rounded-2xl text-amber-600">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        <div class="flex justify-between items-start mb-10">
+                            <div class="bg-amber-50 p-5 rounded-[1.5rem] text-amber-600 group-hover:bg-amber-600 group-hover:text-white transition-colors duration-500">
+                                <i data-lucide="alert-circle" class="w-8 h-8"></i>
                             </div>
-                            <span class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Status Alerta</span>
+                            <span class="bg-amber-100 text-amber-700 text-[9px] font-black px-3 py-1 rounded-full uppercase">Atención</span>
                         </div>
-                        <h3 class="font-black text-2xl text-slate-800 mb-2 uppercase tracking-tighter">Iniciados / No iniciados</h3>
-                        <p class="text-slate-500 text-sm mb-8 font-medium">Control de proyectos iZZi Fija en fase de planeación o detenidos.</p>
+                        <h3 class="font-black text-3xl text-slate-800 mb-3 uppercase tracking-tighter">Pendientes</h3>
+                        <p class="text-slate-400 text-sm font-medium leading-relaxed mb-6">Proyectos detenidos, en planeación o con bloqueos críticos.</p>
+                    </div>
+                    <div class="flex items-center text-amber-600 font-bold text-xs uppercase tracking-widest gap-2">
+                        Revisar Status <i data-lucide="arrow-right" class="w-4 h-4"></i>
                     </div>
                 </div>
 
-                <!-- Tarjeta 4: Bestel -->
-                <div onclick="window.location.href='proyectos-bestel.html'" class="project-card bg-white p-8 rounded-[2rem] border border-slate-200 shadow-sm flex flex-col justify-between">
+                <!-- Bestel -->
+                <div onclick="window.location.href='proyectos-bestel.html'" class="project-card bg-white p-10 rounded-[3rem] border border-slate-100 shadow-sm flex flex-col justify-between group">
                     <div>
-                        <div class="flex justify-between items-center mb-6">
-                            <div class="bg-emerald-50 p-4 rounded-2xl text-emerald-600">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                        <div class="flex justify-between items-start mb-10">
+                            <div class="bg-emerald-50 p-5 rounded-[1.5rem] text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white transition-colors duration-500">
+                                <i data-lucide="briefcase" class="w-8 h-8"></i>
                             </div>
-                            <span class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Bestel</span>
+                            <span class="bg-emerald-50 text-emerald-700 text-[9px] font-black px-3 py-1 rounded-full uppercase">Bestel</span>
                         </div>
-                        <h3 class="font-black text-2xl text-slate-800 mb-2 uppercase tracking-tighter">Bestel</h3>
-                        <p class="text-slate-500 text-sm mb-8 font-medium">Listado General de Proyectos Bestal.</p>
+                        <h3 class="font-black text-3xl text-slate-800 mb-3 uppercase tracking-tighter">Bestel</h3>
+                        <p class="text-slate-400 text-sm font-medium leading-relaxed mb-6">Soluciones empresariales y proyectos de red de transporte Bestel.</p>
+                    </div>
+                    <div class="flex items-center text-emerald-600 font-bold text-xs uppercase tracking-widest gap-2">
+                        Ver Proyectos <i data-lucide="arrow-right" class="w-4 h-4"></i>
                     </div>
                 </div>
 
@@ -133,7 +166,60 @@
         </div>
     </main>
 
-    <script src="js/app.js"></script>
-    <script src="js/authentication.js"></script>
+    <script>
+        // CONFIGURACIÓN DE VISTA Y AUTH
+        function updateUI(user) {
+            const btn = document.getElementById('auth-btn');
+            const userEmail = document.getElementById('user-email');
+            
+            if (user) {
+                document.body.classList.add('auth-active');
+                document.body.classList.remove('auth-inactive');
+                if(btn) btn.innerText = "Cerrar Sesión";
+                if(userEmail) {
+                    userEmail.innerText = user.email || "MODO DESARROLLO";
+                    userEmail.classList.remove('hidden');
+                }
+            } else {
+                document.body.classList.add('auth-inactive');
+                document.body.classList.remove('auth-active');
+                if(btn) btn.innerText = "Acceder";
+                if(userEmail) userEmail.classList.add('hidden');
+            }
+            lucide.createIcons();
+        }
+
+        // BYPASS PARA DESARROLLO LOCAL
+        const hostname = window.location.hostname;
+        const isLocal = hostname === "localhost" || hostname === "127.0.0.1";
+
+        if (isLocal) {
+            console.log("🛠️ Entorno local detectado - Saltando Login");
+            setTimeout(() => updateUI({ email: "Local Admin" }), 100);
+        } else {
+            // Lógica de Netlify Identity para producción
+            if (window.netlifyIdentity) {
+                netlifyIdentity.on('init', user => updateUI(user));
+                netlifyIdentity.on('login', user => updateUI(user));
+                netlifyIdentity.on('logout', () => updateUI(null));
+            }
+        }
+
+        function handleAuthAction() {
+            if (isLocal) {
+                alert("En modo local no es necesario cerrar sesión.");
+            } else if (window.netlifyIdentity) {
+                const user = netlifyIdentity.currentUser();
+                if (user) netlifyIdentity.logout();
+                else netlifyIdentity.open();
+            }
+        }
+
+        // Inicializar iconos
+        lucide.createIcons();
+    </script>
+
+    <!--script src="js/app.js"></!--script-->
+    <!--script src="js/authentication.js"></!--script-->
 </body>
 </html>
