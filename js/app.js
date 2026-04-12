@@ -1,51 +1,35 @@
-// DOM Elements
-const authBtn = document.getElementById('auth-btn');
-const userNameSpan = document.getElementById('user-name');
-const body = document.body;
-// Initialize Identity
+// Lógica de Identidad
 netlifyIdentity.on('init', user => {
     if (user) {
-        updateUI(user);
+        document.body.classList.add('authenticated');
+        setupPage();
     }
 });
-// Handle Login
-netlifyIdentity.on('login', user => {
-    updateUI(user);
-    netlifyIdentity.close();
-});
-// Handle Logout
+
 netlifyIdentity.on('logout', () => {
-    updateUI(null);
+    window.location.href = 'index.html';
 });
-function updateUI(user) {
-    if (user) {
-        body.classList.add('authenticated');
-        authBtn.innerText = 'Cerrar Sesión';
-        authBtn.classList.replace('bg-indigo-600', 'bg-red-500');
-        authBtn.onclick = () => netlifyIdentity.logout();
-        userNameSpan.innerText = user.user_metadata.full_name || user.email;
-    } else {
-        body.classList.remove('authenticated');
-        authBtn.innerText = 'Acceder';
-        authBtn.classList.replace('bg-red-500', 'bg-indigo-600');
-        authBtn.onclick = () => netlifyIdentity.open();
-    }
+
+// Personalizar título según el archivo
+function setupPage() {
+    const path = window.location.pathname;
+    const titleElement = document.getElementById('page-title');
+    
+    if (path.includes('izzi-fija')) titleElement.innerText = 'Dashboard: iZZi Fija';
+    else if (path.includes('izzi-mobile')) titleElement.innerText = 'Dashboard: iZZi Mobile';
+    else if (path.includes('pendientes')) titleElement.innerText = 'Proyectos Pendientes / No Iniciados';
+    else if (path.includes('bestel')) titleElement.innerText = 'Dashboard: Proyectos Bestel';
+    else titleElement.innerText = 'Detalle de Vertical';
 }
-function addProject() {
-    // Placeholder function for PM action
-    const title = prompt("Nombre del Proyecto:");
-    if(title) {
-        console.log("PM está creando:", title);
-        // Aquí iría la lógica para guardar en base de datos
-    }
-}        
-// Final script for redirect after sign up
-if (window.netlifyIdentity) {
-  window.netlifyIdentity.on("init", user => {
+
+// Si el usuario no está logueado al cargar (y ya se inicializó el widget)
+setTimeout(() => {
+    const user = netlifyIdentity.currentUser();
     if (!user) {
-      window.netlifyIdentity.on("login", () => {
-        document.location.href = "/";
-      });
+        document.getElementById('logged-in-view').style.display = 'none';
+        document.getElementById('logged-out-view').style.display = 'block';
+    } else {
+        document.body.classList.add('authenticated');
+        setupPage();
     }
-  });
-}
+}, 1000);
