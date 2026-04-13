@@ -191,8 +191,15 @@
 
         // BYPASS PARA DESARROLLO LOCAL
         const hostname = window.location.hostname;
-        const isLocal = hostname === "localhost" || hostname === "127.0.0.1" || hostname === "proyectosmexicointraway.github.io";
+        //const isLocal = hostname === "localhost" || hostname === "127.0.0.1" || hostname === "proyectosmexicointraway.github.io";
+        const allowedBypassHosts = [
+            "localhost",
+            "127.0.0.1",
+            "proyectosmexicointraway.github.io"
+        ];
 
+        const isLocal = allowedBypassHosts.includes(hostname);
+        
         if (isLocal) {
             console.log("🛠️ Entorno local detectado - Saltando Login");
             setTimeout(() => updateUI({ email: "Local Admin" }), 100);
